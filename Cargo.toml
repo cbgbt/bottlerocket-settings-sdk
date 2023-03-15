@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "bottlerocket-settings-sdk",
+    "sample-setting-handler",
+    "generate-readme"
+]

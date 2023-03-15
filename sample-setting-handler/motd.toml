@@ -1,0 +1,22 @@
+[extension]
+name = "motd"
+supported-versions = [
+    "v1",
+    "v2",
+]
+default-version = "v1"
+
+[generation]
+required-settings = [
+]
+
+[validation]
+validated-settings = [
+
+]
+
+
+[templating.v1]
+helpers = [
+    "sample-helper"
+]
