@@ -1,5 +1,3 @@
-use std::path::PathBuf;
-
 pub mod proto1;
 
 pub use clap::{Args, Parser, Subcommand};
