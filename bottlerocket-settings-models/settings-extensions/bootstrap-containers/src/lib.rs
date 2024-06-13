@@ -1,7 +1,7 @@
-/// Settings related to bootstrap containers.
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::{BootstrapContainerMode, Identifier, Url, ValidBase64};
+/// Settings related to bootstrap containers.
+use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::{collections::HashMap, convert::Infallible};
 

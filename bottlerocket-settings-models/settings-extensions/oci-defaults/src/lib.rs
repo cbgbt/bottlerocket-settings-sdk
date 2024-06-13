@@ -2,9 +2,9 @@
 mod de;
 
 use crate::de::deserialize_limit;
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::{OciDefaultsCapability, OciDefaultsResourceLimitType};
+use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::convert::Infallible;

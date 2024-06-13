@@ -2,9 +2,9 @@
 /// seed that determines in which wave the instance will update, etc.
 pub mod generate;
 
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::{FriendlyVersion, Url};
+use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
 use std::convert::Infallible;
 
 #[model(impl_default = true)]

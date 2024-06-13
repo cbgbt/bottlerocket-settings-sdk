@@ -1,8 +1,8 @@
+use bottlerocket_model_derive::model;
+use bottlerocket_modeled_types::{KmodKey, Lockdown, SysctlKey};
 /// The kernel settings can be used to configure settings related to the kernel, e.g.  
 /// kernel modules
 use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
-use bottlerocket_model_derive::model;
-use bottlerocket_modeled_types::{KmodKey, Lockdown, SysctlKey};
 use std::collections::HashMap;
 use std::convert::Infallible;
 

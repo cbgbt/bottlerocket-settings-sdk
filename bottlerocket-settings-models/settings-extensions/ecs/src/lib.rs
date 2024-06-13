@@ -1,10 +1,10 @@
-/// Settings related to Amazon ECS
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::{
     ECSAgentImagePullBehavior, ECSAgentLogLevel, ECSAttributeKey, ECSAttributeValue,
     ECSDurationValue, SingleLineString,
 };
+/// Settings related to Amazon ECS
+use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
 use std::{collections::HashMap, convert::Infallible};
 
 #[model(impl_default = true)]

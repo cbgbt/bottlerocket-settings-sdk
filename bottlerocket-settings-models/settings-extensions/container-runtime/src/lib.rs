@@ -1,6 +1,6 @@
+use bottlerocket_model_derive::model;
 ///Settings related to Container Runtime
 use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
-use bottlerocket_model_derive::model;
 use std::convert::Infallible;
 
 #[model(impl_default = true)]

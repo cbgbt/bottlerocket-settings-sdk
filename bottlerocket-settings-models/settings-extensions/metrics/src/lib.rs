@@ -1,7 +1,7 @@
-/// The aws settings can be used to configure settings related to AWS
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::Url;
+/// The aws settings can be used to configure settings related to AWS
+use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
 use std::convert::Infallible;
 
 // Platform-specific settings

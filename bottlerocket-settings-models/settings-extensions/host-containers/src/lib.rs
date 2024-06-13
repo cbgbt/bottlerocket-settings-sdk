@@ -1,7 +1,7 @@
-/// host-containers settings allow users to configure multiple host containers
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::{Identifier, Url, ValidBase64};
+/// host-containers settings allow users to configure multiple host containers
+use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::collections::HashMap;
 use std::convert::Infallible;

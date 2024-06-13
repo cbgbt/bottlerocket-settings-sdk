@@ -1,8 +1,8 @@
 /// The motd setting is used to set the "message of the day" that is shown to users when logging
 /// into the Bottlerocket control container.
 use bottlerocket_settings_sdk::{GenerateResult, LinearlyMigrateable, NoMigration, SettingsModel};
-use std::convert::Infallible;
 use bottlerocket_string_impls_for::string_impls_for;
+use std::convert::Infallible;
 
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct MotdV1 {

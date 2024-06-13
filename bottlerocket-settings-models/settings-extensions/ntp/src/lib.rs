@@ -1,8 +1,8 @@
+use bottlerocket_model_derive::model;
+use bottlerocket_modeled_types::Url;
 /// The ntp settings can be used to specify time servers with which to synchronize the instance's
 /// clock.
 use bottlerocket_settings_sdk::{GenerateResult, LinearlyMigrateable, NoMigration, SettingsModel};
-use bottlerocket_model_derive::model;
-use bottlerocket_modeled_types::Url;
 use std::convert::Infallible;
 
 #[model(impl_default = true)]

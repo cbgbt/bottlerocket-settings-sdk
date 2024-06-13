@@ -1,6 +1,6 @@
+use bottlerocket_model_derive::model;
 /// Settings related to host-provided OCI Hooks
 use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
-use bottlerocket_model_derive::model;
 use std::convert::Infallible;
 
 /// The log4j hotpatch functionality is no longer included in Bottlerocket as of v1.15.0.
