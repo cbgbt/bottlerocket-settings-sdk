@@ -66,9 +66,10 @@ where
 mod node_taint_tests {
     use crate::{KubernetesSettings, KubernetesTaintValue};
     use std::convert::TryFrom;
-    static TEST_NODE_TAINT_LIST: &str = include_str!("../tests/data/node-taint-list-val");
-    static TEST_NODE_TAINT_SINGLE: &str = include_str!("../tests/data/node-taint-single-val");
-    static TEST_NODE_TAINT_EMPTY_LIST: &str = include_str!("../tests/data/node-taint-empty-list");
+    static TEST_NODE_TAINT_LIST: &str = include_str!("../../tests/data/node-taint-list-val");
+    static TEST_NODE_TAINT_SINGLE: &str = include_str!("../../tests/data/node-taint-single-val");
+    static TEST_NODE_TAINT_EMPTY_LIST: &str =
+        include_str!("../../tests/data/node-taint-empty-list");
 
     #[test]
     fn node_taints_list_representation() {
@@ -180,8 +181,8 @@ where
 #[cfg(test)]
 mod mirrors_tests {
     use crate::RegistrySettings;
-    static TEST_MIRRORS_ARRAY: &str = include_str!("../tests/data/mirrors-array");
-    static TEST_MIRRORS_TABLE: &str = include_str!("../tests/data/mirrors-table");
+    static TEST_MIRRORS_ARRAY: &str = include_str!("../../tests/data/mirrors-array");
+    static TEST_MIRRORS_TABLE: &str = include_str!("../../tests/data/mirrors-table");
 
     #[test]
     fn registry_mirrors_array_representation() {

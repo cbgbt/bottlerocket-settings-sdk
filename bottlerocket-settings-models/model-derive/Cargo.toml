@@ -1,11 +1,10 @@
 [package]
-name = "model-derive"
+name = "bottlerocket-model-derive"
 version = "0.1.0"
 authors = ["Tom Kirchner <tjk@amazon.com>"]
 license = "Apache-2.0 OR MIT"
 edition = "2021"
 publish = false
-build = "build.rs"
 # Don't rebuild crate just because of changes to README.
 exclude = ["README.md"]
 
@@ -17,6 +16,3 @@ proc-macro = true
 darling = "0.20"
 quote = "1"
 syn = { version = "2", default-features = false, features = ["full", "parsing", "printing", "proc-macro", "visit-mut"] }
-
-[build-dependencies]
-generate-readme = { version = "0.1", path = "../../generate-readme" }

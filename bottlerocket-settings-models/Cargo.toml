@@ -6,7 +6,6 @@ members = [
     "modeled-types",
     "scalar",
     "scalar-derive",
-    "settings-extensions",
     "settings-models",
     "string_impls_for",
 ]

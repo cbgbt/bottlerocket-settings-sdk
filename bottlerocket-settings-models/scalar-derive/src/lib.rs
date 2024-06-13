@@ -39,9 +39,9 @@ This is an example of a very common use-case in Bottlerocket. We have a string, 
 validate it. In this example we want to return an error if the string is "pineapple".
 
 ```
-use scalar::traits::{Scalar, Validate};
-use scalar::ValidationError;
-use scalar_derive::Scalar;
+use bottlerocket_scalar::traits::{Scalar, Validate};
+use bottlerocket_scalar::ValidationError;
+use bottlerocket_scalar_derive::Scalar;
 
 // We create a struct with an inner type in a field named `inner`. We derive `Scalar`.
 #[derive(Debug, PartialEq, Scalar)]
@@ -79,9 +79,9 @@ Here we use the Scalar macro with a numeric inner type. The inner value is const
 than 4.
 
 ```
-use scalar::traits::{Scalar, Validate};
-use scalar::ValidationError;
-use scalar_derive::Scalar;
+use bottlerocket_scalar::traits::{Scalar, Validate};
+use bottlerocket_scalar::ValidationError;
+use bottlerocket_scalar_derive::Scalar;
 
 #[derive(Debug, PartialEq, Scalar)]
 struct CatQuantity {
@@ -114,9 +114,9 @@ In this example we will show how to use the parameters `as_ref_str` and `inner`.
 contrived, but demonstrates how to pass parameters to the derive macro.
 
 ```
-use scalar::traits::{Scalar, Validate};
-use scalar::ValidationError;
-use scalar_derive::Scalar;
+use bottlerocket_scalar::traits::{Scalar, Validate};
+use bottlerocket_scalar::ValidationError;
+use bottlerocket_scalar_derive::Scalar;
 use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
@@ -183,7 +183,7 @@ When used with an enum, `Scalar` implements a few `String` conversions such as `
 `FromStr`.
 
 ```
-use scalar_derive::Scalar;
+use bottlerocket_scalar_derive::Scalar;
 use serde::{Serialize, Deserialize};
 use std::convert::TryInto;
 
@@ -322,14 +322,14 @@ impl StructInfo {
             // so that quote will do the right thing with it.
             let index = syn::Index::from(index);
             quote!(
-                impl scalar::traits::Scalar for #scalar {
+                impl bottlerocket_scalar::traits::Scalar for #scalar {
                     type Inner = #inner_type;
 
-                    fn new<T: Into<Self::Inner>>(inner: T) -> Result<Self, scalar::ValidationError>
+                    fn new<T: Into<Self::Inner>>(inner: T) -> Result<Self, bottlerocket_scalar::ValidationError>
                     where
                         Self: Sized,
                     {
-                        <#scalar as scalar::traits::Validate>::validate(inner.into())
+                        <#scalar as bottlerocket_scalar::traits::Validate>::validate(inner.into())
                     }
 
                     fn inner(&self) -> &Self::Inner { &self.#index }
@@ -341,14 +341,14 @@ impl StructInfo {
             // If the inner field is named, we cast it as an identifier.
             let inner_field = format_ident!("{}", &self.inner_field);
             quote!(
-                impl scalar::traits::Scalar for #scalar {
+                impl bottlerocket_scalar::traits::Scalar for #scalar {
                     type Inner = #inner_type;
 
-                    fn new<T: Into<Self::Inner>>(inner: T) -> Result<Self, scalar::ValidationError>
+                    fn new<T: Into<Self::Inner>>(inner: T) -> Result<Self, bottlerocket_scalar::ValidationError>
                     where
                         Self: Sized,
                     {
-                        <#scalar as scalar::traits::Validate>::validate(inner.into())
+                        <#scalar as bottlerocket_scalar::traits::Validate>::validate(inner.into())
                     }
 
                     fn inner(&self) -> &Self::Inner { &self.#inner_field }
@@ -362,9 +362,9 @@ impl StructInfo {
         let impls = quote!(
             #trait_impl
 
-            impl std::convert::TryFrom<<#scalar as scalar::traits::Scalar>::Inner> for #scalar {
+            impl std::convert::TryFrom<<#scalar as bottlerocket_scalar::traits::Scalar>::Inner> for #scalar {
                 type Error = ValidationError;
-                fn try_from(input: <#scalar as scalar::traits::Scalar>::Inner) -> Result<Self, ValidationError> {
+                fn try_from(input: <#scalar as bottlerocket_scalar::traits::Scalar>::Inner) -> Result<Self, ValidationError> {
                     Self::new(input)
                 }
             }
@@ -374,7 +374,7 @@ impl StructInfo {
                 where
                     D: serde::de::Deserializer<'de>,
                 {
-                    let original = <#scalar as scalar::traits::Scalar>::Inner::deserialize(deserializer)?;
+                    let original = <#scalar as bottlerocket_scalar::traits::Scalar>::Inner::deserialize(deserializer)?;
                     // We need to make sure the serde Error trait is in scope.
                     use serde::de::Error as _;
                     let scalar = #scalar::new(original).map_err(|e| {
@@ -418,19 +418,19 @@ impl StructInfo {
                 }
             }
 
-            impl PartialEq<<#scalar as scalar::traits::Scalar>::Inner> for #scalar {
-                fn eq(&self, other: &<#scalar as scalar::traits::Scalar>::Inner) -> bool {
+            impl PartialEq<<#scalar as bottlerocket_scalar::traits::Scalar>::Inner> for #scalar {
+                fn eq(&self, other: &<#scalar as bottlerocket_scalar::traits::Scalar>::Inner) -> bool {
                     (*(&self.inner())).eq(other)
                 }
             }
 
-            impl PartialEq<#scalar> for <#scalar as scalar::traits::Scalar>::Inner {
+            impl PartialEq<#scalar> for <#scalar as bottlerocket_scalar::traits::Scalar>::Inner {
                 fn eq(&self, other: &#scalar) -> bool {
                     self.eq(*(&other.inner()))
                 }
             }
 
-            impl From<#scalar> for <#scalar as scalar::traits::Scalar>::Inner {
+            impl From<#scalar> for <#scalar as bottlerocket_scalar::traits::Scalar>::Inner {
                 fn from(scalar: #scalar) -> Self {
                     scalar.unwrap()
                 }
@@ -569,7 +569,7 @@ fn write_string_impls_for_enum(name: &str, ast: &mut TokenStream2) {
     let scalar = format_ident!("{}", name);
     let impls = quote!(
         serde_plain::derive_display_from_serialize!(#scalar);
-        serde_plain::derive_fromstr_from_deserialize!(#scalar, scalar::ValidationError);
+        serde_plain::derive_fromstr_from_deserialize!(#scalar, bottlerocket_scalar::ValidationError);
 
         impl ::std::convert::From<#scalar> for String {
             fn from(s: #scalar) -> Self {
@@ -578,7 +578,7 @@ fn write_string_impls_for_enum(name: &str, ast: &mut TokenStream2) {
         }
 
         impl ::std::convert::TryFrom<&str> for #scalar {
-            type Error = scalar::ValidationError;
+            type Error = bottlerocket_scalar::ValidationError;
 
             fn try_from(value: &str) -> Result<Self, Self::Error> {
                 value.parse()
@@ -586,7 +586,7 @@ fn write_string_impls_for_enum(name: &str, ast: &mut TokenStream2) {
         }
 
         impl ::std::convert::TryFrom<String> for #scalar {
-            type Error = scalar::ValidationError;
+            type Error = bottlerocket_scalar::ValidationError;
 
             fn try_from(value: String) -> Result<Self, Self::Error> {
                 value.as_str().parse()

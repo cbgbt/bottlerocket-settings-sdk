@@ -1,4 +1,4 @@
-use scalar_derive::Scalar;
+use bottlerocket_scalar_derive::Scalar;
 use serde::{Deserialize, Serialize};
 
 /// OciDefaultsCapability specifies which process capabilities are

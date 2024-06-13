@@ -1,7 +1,8 @@
 use super::error;
+use bottlerocket_scalar_derive::Scalar;
+use bottlerocket_string_impls_for::string_impls_for;
 use lazy_static::lazy_static;
 use regex::Regex;
-use scalar_derive::Scalar;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 // Just need serde's Error in scope to get its trait methods
 use serde::de::Error as _;
@@ -11,7 +12,6 @@ use std::collections::HashMap;
 use std::convert::TryFrom;
 use std::fmt::{self, Display, Formatter};
 use std::net::IpAddr;
-use string_impls_for::string_impls_for;
 
 use crate::SingleLineString;
 

@@ -24,8 +24,8 @@ pub mod traits {
     /// # Example
     ///
     /// ```
-    /// use scalar::traits::Scalar;
-    /// use scalar::ValidationError;
+    /// use bottlerocket_scalar::traits::Scalar;
+    /// use bottlerocket_scalar::ValidationError;
     ///
     /// pub struct Pizza {
     ///     inner: String,
@@ -87,8 +87,8 @@ pub mod traits {
     /// derive macro.
     ///
     /// ```
-    /// use scalar::traits::{Scalar, Validate};
-    /// use scalar::ValidationError;
+    /// use bottlerocket_scalar::traits::{Scalar, Validate};
+    /// use bottlerocket_scalar::ValidationError;
     ///
     /// pub struct Pizza {
     ///     inner: String,

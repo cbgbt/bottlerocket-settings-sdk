@@ -19,7 +19,7 @@ Consider a model which we want to contain a string name for a vegetable, you cou
 something like so:
 
 ```
-use string_impls_for::string_impls_for;
+use bottlerocket_string_impls_for::string_impls_for;
 
 #[derive(Debug, PartialEq, Eq)]
 struct Vegetable {

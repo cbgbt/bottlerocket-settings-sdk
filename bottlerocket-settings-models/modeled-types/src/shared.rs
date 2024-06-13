@@ -1,17 +1,17 @@
 use super::error;
 use base64::Engine;
+use bottlerocket_scalar::traits::{Scalar, Validate};
+use bottlerocket_scalar::ValidationError;
+use bottlerocket_scalar_derive::Scalar;
+use bottlerocket_string_impls_for::string_impls_for;
 use lazy_static::lazy_static;
 use regex::Regex;
-use scalar::traits::{Scalar, Validate};
-use scalar::ValidationError;
-use scalar_derive::Scalar;
 use semver::Version;
 use serde::{Deserialize, Serialize};
 use snafu::{ensure, ResultExt};
 use std::convert::TryFrom;
 use std::net::IpAddr;
 use std::str::FromStr;
-use string_impls_for::string_impls_for;
 use url::Host;
 
 /// ValidBase64 can only be created by deserializing from valid base64 text.  It stores the

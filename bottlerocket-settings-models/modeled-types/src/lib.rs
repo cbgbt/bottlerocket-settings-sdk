@@ -7,8 +7,8 @@
 // be implemented for you with the string_impls_for macro.
 
 pub mod error {
+    use bottlerocket_scalar::ValidationError;
     use regex::Regex;
-    use scalar::ValidationError;
     use snafu::Snafu;
 
     // x509_parser::pem::Pem::parse_x509 returns an Err<X509Error>, which is a bit

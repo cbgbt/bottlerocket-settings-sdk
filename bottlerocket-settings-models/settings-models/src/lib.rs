@@ -24,27 +24,24 @@ The `#[model]` attribute on Settings and its sub-structs reduces duplication and
 // The "de" module contains custom deserialization trait implementation for models.
 mod de;
 
-pub use modeled_types;
-use modeled_types::KubernetesCPUManagerPolicyOption;
-use modeled_types::KubernetesEvictionKey;
-use modeled_types::KubernetesMemoryManagerPolicy;
-use modeled_types::KubernetesMemoryReservation;
-use modeled_types::NonNegativeInteger;
-
-// Types used to communicate between client and server for 'apiclient exec'.
-pub mod exec;
+pub use bottlerocket_modeled_types;
+use bottlerocket_modeled_types::KubernetesCPUManagerPolicyOption;
+use bottlerocket_modeled_types::KubernetesEvictionKey;
+use bottlerocket_modeled_types::KubernetesMemoryManagerPolicy;
+use bottlerocket_modeled_types::KubernetesMemoryReservation;
+use bottlerocket_modeled_types::NonNegativeInteger;
 
 // Below, we define common structures used in the API surface; specific variants build a Settings
 // structure based on these, and that's what gets exposed via the API.  (Specific variants' models
 // are in subdirectories and linked into place by build.rs at variant/current.)
 
-use model_derive::model;
+use bottlerocket_model_derive::model;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::net::IpAddr;
 
 use crate::de::{deserialize_limit, deserialize_mirrors, deserialize_node_taints};
-use modeled_types::{
+use bottlerocket_modeled_types::{
     BootConfigKey, BootConfigValue, BootstrapContainerMode, CpuManagerPolicy, CredentialProvider,
     DNSDomain, EtcHostsEntries, Identifier, IntegerPercent, KernelCpuSetValue,
     KubernetesAuthenticationMode, KubernetesBootstrapToken, KubernetesCloudProvider,

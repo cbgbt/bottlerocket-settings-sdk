@@ -3,12 +3,12 @@ use regex::Regex;
 use serde::{Deserialize, Serialize};
 // Just need serde's Error in scope to get its trait methods
 use super::error::{self, big_pattern_error};
-use scalar::traits::{Scalar, Validate};
-use scalar::ValidationError;
-use scalar_derive::Scalar;
+use bottlerocket_scalar::traits::{Scalar, Validate};
+use bottlerocket_scalar::ValidationError;
+use bottlerocket_scalar_derive::Scalar;
+use bottlerocket_string_impls_for::string_impls_for;
 use snafu::ensure;
 use std::convert::TryFrom;
-use string_impls_for::string_impls_for;
 
 /// ECSAttributeKey represents a string that contains a valid ECS attribute key.  It stores
 /// the original string and makes it accessible through standard traits.

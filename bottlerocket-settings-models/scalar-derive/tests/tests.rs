@@ -1,6 +1,6 @@
-use scalar::traits::{Scalar, Validate};
-use scalar::ValidationError;
-use scalar_derive::Scalar;
+use bottlerocket_scalar::traits::{Scalar, Validate};
+use bottlerocket_scalar::ValidationError;
+use bottlerocket_scalar_derive::Scalar;
 
 // By default the `0` field will be our `inner` field.
 #[derive(Debug, PartialEq, Scalar)]
