@@ -38,8 +38,6 @@ pub mod exec;
 // structure based on these, and that's what gets exposed via the API.  (Specific variants' models
 // are in subdirectories and linked into place by build.rs at variant/current.)
 
-use bottlerocket_release::BottlerocketRelease;
-use bottlerocket_settings_plugin::BottlerocketSettings;
 use model_derive::model;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -56,23 +54,6 @@ use modeled_types::{
     OciDefaultsResourceLimitType, PemCertificateString, SingleLineString, TopologyManagerPolicy,
     TopologyManagerScope, Url, ValidBase64, ValidLinuxHostname,
 };
-
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct Settings {
-    inner: BottlerocketSettings,
-}
-
-// This is the top-level model exposed by the API system. It contains the common sections for all
-// variants.  This allows a single API call to retrieve everything the API system knows, which is
-// useful as a check and also, for example, as a data source for templated configuration files.
-#[model]
-pub struct Model {
-    settings: Settings,
-    services: Services,
-    configuration_files: ConfigurationFiles,
-    os: BottlerocketRelease,
-}
 
 // Kubernetes static pod manifest settings
 #[model]
@@ -239,42 +220,6 @@ struct ContainerRuntimeSettings {
     max_concurrent_downloads: i32,
     enable_unprivileged_ports: bool,
     enable_unprivileged_icmp: bool,
-}
-
-///// Internal services
-
-// Note: Top-level objects that get returned from the API should have a "rename" attribute
-// matching the struct name, but in kebab-case, e.g. ConfigurationFiles -> "configuration-files".
-// This lets it match the datastore name.
-// Objects that live inside those top-level objects, e.g. Service lives in Services, should have
-// rename="" so they don't add an extra prefix to the datastore path that doesn't actually exist.
-// This is important because we have APIs that can return those sub-structures directly.
-
-pub type Services = HashMap<String, Service>;
-
-#[model(add_option = false, rename = "")]
-struct Service {
-    configuration_files: Vec<SingleLineString>,
-    restart_commands: Vec<String>,
-}
-
-pub type ConfigurationFiles = HashMap<String, ConfigurationFile>;
-
-#[model(add_option = false, rename = "")]
-struct ConfigurationFile {
-    path: SingleLineString,
-    template_path: SingleLineString,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    mode: Option<String>,
-}
-
-///// Metadata
-
-#[model(add_option = false, rename = "metadata")]
-struct Metadata {
-    key: SingleLineString,
-    md: SingleLineString,
-    val: toml::Value,
 }
 
 ///// Bootstrap Containers
