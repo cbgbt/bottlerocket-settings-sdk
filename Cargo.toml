@@ -2,9 +2,44 @@
 resolver = "2"
 
 members = [
-    "bottlerocket-settings-sdk",
-    "bottlerocket-template-helper",
-    "bottlerocket-defaults-helper",
+    # Settings Plugin SDK
     "bottlerocket-settings-plugin",
     "bottlerocket-settings-derive",
+    "bottlerocket-defaults-helper",
+
+    # Public API for Bottlerocket settings models
+    "bottlerocket-settings-models/settings-models",
+
+    # Useful libraries for constructing settings models
+    "bottlerocket-settings-models/model-derive",
+    "bottlerocket-settings-models/modeled-types",
+    "bottlerocket-settings-models/scalar",
+    "bottlerocket-settings-models/scalar-derive",
+    "bottlerocket-settings-models/string_impls_for",
+
+    # Settings extensions
+    # These will eventually live in the kit workspaces that own the related software
+    "bottlerocket-settings-models/settings-extensions/autoscaling",
+    "bottlerocket-settings-models/settings-extensions/aws",
+    "bottlerocket-settings-models/settings-extensions/bootstrap-containers",
+    "bottlerocket-settings-models/settings-extensions/cloudformation",
+    "bottlerocket-settings-models/settings-extensions/container-registry",
+    "bottlerocket-settings-models/settings-extensions/container-runtime",
+    "bottlerocket-settings-models/settings-extensions/dns",
+    "bottlerocket-settings-models/settings-extensions/ecs",
+    "bottlerocket-settings-models/settings-extensions/host-containers",
+    "bottlerocket-settings-models/settings-extensions/kernel",
+    "bottlerocket-settings-models/settings-extensions/metrics",
+    "bottlerocket-settings-models/settings-extensions/motd",
+    "bottlerocket-settings-models/settings-extensions/network",
+    "bottlerocket-settings-models/settings-extensions/ntp",
+    "bottlerocket-settings-models/settings-extensions/oci-defaults",
+    "bottlerocket-settings-models/settings-extensions/oci-hooks",
+    "bottlerocket-settings-models/settings-extensions/pki",
+    "bottlerocket-settings-models/settings-extensions/updates",
+
+    # Settings Extension SDK
+    # Currently unused in Bottlerocket
+    "bottlerocket-settings-sdk",
+    "bottlerocket-template-helper",
 ]
