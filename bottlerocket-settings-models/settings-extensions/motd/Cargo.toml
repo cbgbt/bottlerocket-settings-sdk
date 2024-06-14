@@ -7,11 +7,7 @@ edition = "2021"
 publish = false
 
 [dependencies]
+bottlerocket-settings-sdk = { path = "../../../bottlerocket-settings-sdk", version = "0.1" }
+bottlerocket-string-impls-for = { version = "0.1", path = "../../string_impls_for" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-bottlerocket-string-impls-for = { version = "0.1", path = "../../string_impls_for" }
-
-[dependencies.bottlerocket-settings-sdk]
-git = "https://github.com/bottlerocket-os/bottlerocket-settings-sdk"
-tag = "bottlerocket-settings-sdk-v0.1.0"
-version = "0.1.0"
