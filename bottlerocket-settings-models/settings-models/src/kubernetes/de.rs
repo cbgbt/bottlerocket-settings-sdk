@@ -63,7 +63,7 @@ where
 
 #[cfg(test)]
 mod node_taint_tests {
-    use super::super::KubernetesSettings;
+    use super::super::KubernetesSettingsV1;
     use bottlerocket_modeled_types::KubernetesTaintValue;
     use std::convert::TryFrom;
     static TEST_NODE_TAINT_LIST: &str = include_str!("../../../tests/data/node-taint-list-val");
@@ -73,7 +73,7 @@ mod node_taint_tests {
 
     #[test]
     fn node_taints_list_representation() {
-        let k8s_settings = toml::from_str::<KubernetesSettings>(TEST_NODE_TAINT_LIST).unwrap();
+        let k8s_settings = toml::from_str::<KubernetesSettingsV1>(TEST_NODE_TAINT_LIST).unwrap();
         assert_eq!(
             k8s_settings
                 .node_taints
@@ -101,7 +101,7 @@ mod node_taint_tests {
 
     #[test]
     fn node_taint_single_representation() {
-        let k8s_settings = toml::from_str::<KubernetesSettings>(TEST_NODE_TAINT_SINGLE).unwrap();
+        let k8s_settings = toml::from_str::<KubernetesSettingsV1>(TEST_NODE_TAINT_SINGLE).unwrap();
         assert_eq!(
             k8s_settings
                 .node_taints
@@ -126,12 +126,12 @@ mod node_taint_tests {
 
     #[test]
     fn node_taint_none_representation() {
-        let k8s_settings = toml::from_str::<KubernetesSettings>("").unwrap();
+        let k8s_settings = toml::from_str::<KubernetesSettingsV1>("").unwrap();
         assert!(k8s_settings.node_taints.is_none());
     }
 
     #[test]
     fn node_taint_empty_list() {
-        assert!(toml::from_str::<KubernetesSettings>(TEST_NODE_TAINT_EMPTY_LIST).is_err());
+        assert!(toml::from_str::<KubernetesSettingsV1>(TEST_NODE_TAINT_EMPTY_LIST).is_err());
     }
 }

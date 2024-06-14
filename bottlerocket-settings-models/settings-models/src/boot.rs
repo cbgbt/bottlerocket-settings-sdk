@@ -4,7 +4,7 @@ use std::collections::HashMap;
 
 // Kernel boot settings
 #[model(impl_default = true)]
-struct BootSettings {
+pub struct BootSettingsV1 {
     reboot_to_reconcile: bool,
     #[serde(
         alias = "kernel",
