@@ -21,7 +21,7 @@ use bottlerocket_modeled_types::{
 
 // Kubernetes static pod manifest settings
 #[model]
-struct StaticPod {
+pub struct StaticPod {
     enabled: bool,
     manifest: ValidBase64,
 }
@@ -29,7 +29,7 @@ struct StaticPod {
 // Kubernetes related settings. The dynamic settings are retrieved from
 // IMDS via Sundog's child "Pluto".
 #[model]
-struct KubernetesSettings {
+pub struct KubernetesSettingsV1 {
     // Settings that must be specified via user data or through API requests.  Not all settings are
     // useful for all modes. For example, in standalone mode the user does not need to specify any
     // cluster information, and the bootstrap token is only needed for TLS authentication mode.

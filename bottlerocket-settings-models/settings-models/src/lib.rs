@@ -1,28 +1,47 @@
 /*!
-# API models
+# Settings models
 
-Bottlerocket has different variants supporting different features and use cases.
+Bottlerocket supports building different variants with their own features and use cases.
 Each variant has its own set of software, and therefore needs its own configuration.
-We support having an API model for each variant to support these different configurations.
+We support having an API model for each variant to support these different configurations via
+Settings Plugins.
 
-The model here defines a top-level `Settings` structure, and delegates the actual implementation to a ["settings plugin"](https://github.com/bottlerocket/bottlerocket-settings-sdk/tree/settings-plugins).
-Settings plugin are written in Rust as a "cdylib" crate, and loaded at runtime.
-
-Each settings plugin must define its own private `Settings` structure.
-It can use pre-defined structures inside, or custom ones as needed.
-
-`apiserver::datastore` offers serialization and deserialization modules that make it easy to map between Rust types and the data store, and thus, all inputs and outputs are type-checked.
-
-At the field level, standard Rust types can be used, or ["modeled types"](src/modeled_types) that add input validation.
-
-The `#[model]` attribute on Settings and its sub-structs reduces duplication and adds some required metadata; see [its docs](model-derive/) for details.
+Settings Plugins are composed of Rust structs which, at minimum, provide `Default` and `Deserialize`
+implementations.
+This package provides settings structs for common settings used in Bottlerocket, which can be added
+to Settings Plugins.
+The package also exports a set of `modeled_types` which can be helpful in creating additional
+settings structures that helpfully validate inputs on deserialize.
 */
 
-// Clippy has a false positive in the presence of the Scalar macro.
-#![allow(clippy::derived_hash_with_manual_eq)]
-
-// The "de" module contains custom deserialization trait implementation for models.
 mod boot;
 mod kubernetes;
 
-pub use bottlerocket_modeled_types;
+// Expose types for creating new settings structs
+pub use bottlerocket_model_derive as model_derive;
+pub use bottlerocket_modeled_types as modeled_types;
+pub use bottlerocket_scalar as scalar;
+pub use bottlerocket_scalar_derive as scalar_derive;
+pub use bottlerocket_string_impls_for as string_impls_for;
+
+// Expose common settings structs
+pub use crate::boot::BootSettingsV1;
+pub use crate::kubernetes::KubernetesSettingsV1;
+pub use settings_extension_autoscaling::AutoScalingSettingsV1;
+pub use settings_extension_aws::AwsSettingsV1;
+pub use settings_extension_bootstrap_containers::BootstrapContainersSettingsV1;
+pub use settings_extension_cloudformation::CloudFormationSettingsV1;
+pub use settings_extension_container_registry::RegistrySettingsV1;
+pub use settings_extension_container_runtime::ContainerRuntimeSettingsV1;
+pub use settings_extension_dns::DnsSettingsV1;
+pub use settings_extension_ecs::ECSSettingsV1;
+pub use settings_extension_host_containers::HostContainersSettingsV1;
+pub use settings_extension_kernel::KernelSettingsV1;
+pub use settings_extension_metrics::MetricsSettingsV1;
+pub use settings_extension_motd::MotdV1;
+pub use settings_extension_network::NetworkSettingsV1;
+pub use settings_extension_ntp::NtpSettingsV1;
+pub use settings_extension_oci_defaults::OciDefaultsV1;
+pub use settings_extension_oci_hooks::OciHooksSettingsV1;
+pub use settings_extension_pki::PkiSettingsV1;
+pub use settings_extension_updates::UpdatesSettingsV1;
