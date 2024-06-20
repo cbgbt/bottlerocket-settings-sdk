@@ -28,6 +28,8 @@ impl ToTokens for SettingsPlugin {
     fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
         let SettingsPlugin { ident } = self;
         tokens.extend(quote! {
+            use bottlerocket_settings_plugin::abi_stable;
+
             // Provide the "serialize" interface expected for this type.
             impl<'a> abi_stable::erased_types::SerializeType<'a> for #ident {
                 type Interface = bottlerocket_settings_plugin::BottlerocketSettingsInterface;
