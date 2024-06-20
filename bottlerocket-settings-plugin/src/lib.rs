@@ -19,3 +19,6 @@ pub use settings::*;
 
 // Export the derive macro via this crate, since it depends on the implementation details here.
 pub use bottlerocket_settings_derive::SettingsPlugin;
+
+// Re-export abi_stable to make it easier to synchronize versions across plugin & host programs.
+pub use abi_stable;
