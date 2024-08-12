@@ -1456,6 +1456,24 @@ pub struct NvidiaDevicePluginSettings {
     pass_device_specs: bool,
     device_id_strategy: NvidiaDeviceIdStrategy,
     device_list_strategy: NvidiaDeviceListStrategy,
+    device_sharing: NvidiaDeviceSharing,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[serde(deny_unknown_fields, tag = "kind")]
+pub enum NvidiaDeviceSharing {
+    #[serde(rename = "time-slicing")]
+    TimeSlicing(TimeSlicingSettings),
+}
+
+impl Default for NvidiaDeviceSharing {
+    fn default() -> Self {
+        NvidiaDeviceSharing::TimeSlicing(TimeSlicingSettings::default())
+    }
+}
+
+#[model(impl_default = true)]
+struct TimeSlicingSettings {
     max_sharing_per_gpu: PositiveInteger,
     rename_shared_gpu: bool,
 }
@@ -1476,13 +1494,27 @@ pub enum NvidiaDeviceListStrategy {
 
 #[cfg(test)]
 mod tests {
+    use serde_json::json;
+
     use super::*;
 
     #[test]
     fn test_serde_k8s_device_plugins() {
-        let test_json = r#"{"nvidia":{"pass-device-specs":true,"device-id-strategy":"index","device-list-strategy":"volume-mounts","max-sharing-per-gpu":10,"rename-shared-gpu":true}}"#;
+        let test_json = json!({
+            "nvidia": {
+                "pass-device-specs": true,
+                "device-id-strategy": "index",
+                "device-list-strategy": "volume-mounts",
+                "device-sharing": {
+                    "kind": "time-slicing",
+                    "max-sharing-per-gpu": 10,
+                    "rename-shared-gpu": true
+                }
+            }
+        });
 
-        let device_plugins: K8sDevicePluginsSettings = serde_json::from_str(test_json).unwrap();
+        let device_plugins: K8sDevicePluginsSettings =
+            serde_json::from_value(test_json.clone()).unwrap();
         assert_eq!(
             device_plugins,
             K8sDevicePluginsSettings {
@@ -1490,33 +1522,46 @@ mod tests {
                     pass_device_specs: Some(true),
                     device_id_strategy: Some(NvidiaDeviceIdStrategy::Index),
                     device_list_strategy: Some(NvidiaDeviceListStrategy::VolumeMounts),
-                    max_sharing_per_gpu: Some(PositiveInteger::try_from(10).unwrap()),
-                    rename_shared_gpu: Some(true),
+                    device_sharing: Some(NvidiaDeviceSharing::TimeSlicing(TimeSlicingSettings {
+                        max_sharing_per_gpu: Some(PositiveInteger::try_from(10).unwrap()),
+                        rename_shared_gpu: Some(true),
+                    })),
                 }),
             }
         );
 
-        let results = serde_json::to_string(&device_plugins).unwrap();
+        let results = serde_json::to_value(&device_plugins).unwrap();
         assert_eq!(results, test_json);
     }
 
     #[test]
     fn test_serde_nvidia_device_plugins() {
-        let test_json = r#"{"pass-device-specs":false,"device-id-strategy":"uuid","device-list-strategy":"envvar","max-sharing-per-gpu":10,"rename-shared-gpu":false}"#;
+        let test_json = json!({
+            "pass-device-specs": false,
+            "device-id-strategy": "uuid",
+            "device-list-strategy": "envvar",
+            "device-sharing": {
+                "kind": "time-slicing",
+                "max-sharing-per-gpu": 10,
+                "rename-shared-gpu": false
+            }
+        });
         let nvidia_device_plugins: NvidiaDevicePluginSettings =
-            serde_json::from_str(test_json).unwrap();
+            serde_json::from_value(test_json.clone()).unwrap();
         assert_eq!(
             nvidia_device_plugins,
             NvidiaDevicePluginSettings {
                 pass_device_specs: Some(false),
                 device_id_strategy: Some(NvidiaDeviceIdStrategy::Uuid),
                 device_list_strategy: Some(NvidiaDeviceListStrategy::Envvar),
-                max_sharing_per_gpu: Some(PositiveInteger::try_from(10).unwrap()),
-                rename_shared_gpu: Some(false),
+                device_sharing: Some(NvidiaDeviceSharing::TimeSlicing(TimeSlicingSettings {
+                    max_sharing_per_gpu: Some(PositiveInteger::try_from(10).unwrap()),
+                    rename_shared_gpu: Some(false),
+                })),
             }
         );
 
-        let results = serde_json::to_string(&nvidia_device_plugins).unwrap();
+        let results = serde_json::to_value(&nvidia_device_plugins).unwrap();
         assert_eq!(results, test_json);
     }
     #[test]
