@@ -1,7 +1,7 @@
 //! Settings related to custom DNS settings
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::ValidLinuxHostname;
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use std::convert::Infallible;
 use std::net::IpAddr;
 
@@ -25,37 +25,12 @@ impl SettingsModel for DnsSettingsV1 {
         // Set anything that can be parsed as DnsSettingsV1.
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // DnsSettingsV1 is validated during deserialization.
-        Ok(())
-    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
     use std::str::FromStr;
-
-    #[test]
-    fn test_generate_dns_settings() {
-        assert_eq!(
-            DnsSettingsV1::generate(None, None),
-            Ok(GenerateResult::Complete(DnsSettingsV1 {
-                name_servers: None,
-                search_list: None,
-            }))
-        )
-    }
 
     #[test]
     fn test_serde_dns() {

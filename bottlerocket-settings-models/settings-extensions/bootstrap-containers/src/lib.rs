@@ -1,7 +1,7 @@
 //! Settings related to bootstrap containers.
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::{BootstrapMode, Identifier, Url, ValidBase64};
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::{collections::HashMap, convert::Infallible};
 
@@ -55,38 +55,12 @@ impl SettingsModel for BootstrapContainersSettingsV1 {
         // Set anything that parses as BootstrapContainersSettingsV1.
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // Validate anything that parses as BootstrapContainersSettingsV1.
-        Ok(())
-    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
     use serde_json::json;
-
-    #[test]
-    fn test_generate_bootstrap_container_settings() {
-        let generated = BootstrapContainersSettingsV1::generate(None, None).unwrap();
-
-        assert_eq!(
-            generated,
-            GenerateResult::Complete(BootstrapContainersSettingsV1 {
-                bootstrap_containers: HashMap::new(),
-            })
-        )
-    }
 
     #[test]
     fn test_serde_bootstrap_container() {

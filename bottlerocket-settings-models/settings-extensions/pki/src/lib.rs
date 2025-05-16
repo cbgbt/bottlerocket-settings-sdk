@@ -1,7 +1,7 @@
 //! Settings related to Custom CA Certificates.
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::{Identifier, PemCertificateString};
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::{collections::HashMap, convert::Infallible};
 
@@ -49,20 +49,6 @@ impl SettingsModel for PkiSettingsV1 {
         // Set anything that parses as PkiSettingsV1.
         Ok(())
     }
-
-    fn generate(
-        _existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(PkiSettingsV1 {
-            pki: HashMap::new(),
-        }))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // Validate anything that parses as PkiSettingsV1.
-        Ok(())
-    }
 }
 
 #[cfg(test)]
@@ -71,16 +57,6 @@ mod test {
     use serde_json::json;
 
     static VALID_PEM: &str = include_str!("../tests/data/test-pem");
-
-    #[test]
-    fn test_generate_pki_settings() {
-        assert_eq!(
-            PkiSettingsV1::generate(None, None),
-            Ok(GenerateResult::Complete(PkiSettingsV1 {
-                pki: HashMap::new(),
-            }))
-        )
-    }
 
     #[test]
     fn test_serde_pki() {

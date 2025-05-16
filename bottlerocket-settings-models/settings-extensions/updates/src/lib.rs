@@ -4,7 +4,7 @@ pub mod generate;
 
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::{FriendlyVersion, Url};
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use std::convert::Infallible;
 
 #[model(impl_default = true)]
@@ -31,42 +31,11 @@ impl SettingsModel for UpdatesSettingsV1 {
         // allow anything that parses as UpdatesSettingsV1
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        let partial = existing_partial.unwrap_or_default();
-
-        Ok(GenerateResult::Complete(UpdatesSettingsV1 {
-            seed: Some(partial.seed.unwrap_or_else(generate::generate_seed)),
-            ..partial
-        }))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        Ok(())
-    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-
-    #[test]
-    fn test_generate_updates() {
-        if let GenerateResult::Complete(generated_settings) =
-            UpdatesSettingsV1::generate(None, None).unwrap()
-        {
-            assert!(generated_settings.seed.unwrap() < 2048);
-            assert!(generated_settings.metadata_base_url.is_none());
-            assert!(generated_settings.targets_base_url.is_none());
-            assert!(generated_settings.version_lock.is_none());
-            assert!(generated_settings.ignore_waves.is_none());
-        } else {
-            panic!("generate() should return GenerateResult::Complete")
-        }
-    }
 
     #[test]
     fn test_serde_updates() {

@@ -5,7 +5,7 @@
 //! The [`Migrator`](self::Migrator) trait, is also provided, which allows settings extensions
 //! to customize how they are migrated between different versions.
 use crate::model::erased::AsTypeErasedModel;
-use crate::{GenerateResult, SettingsModel};
+use crate::SettingsModel;
 use serde::{Deserialize, Serialize};
 use std::any::Any;
 use std::convert::Infallible;
@@ -129,24 +129,6 @@ impl SettingsModel for NoMigration {
     }
 
     fn set(_current_value: Option<Self>, _target: Self) -> Result<(), Self::ErrorKind> {
-        unimplemented!(
-            "`NoMigration` used as a marker type. Its settings model should never be used."
-        )
-    }
-
-    fn generate(
-        _existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>, Self::ErrorKind> {
-        unimplemented!(
-            "`NoMigration` used as a marker type. Its settings model should never be used."
-        )
-    }
-
-    fn validate(
-        _value: Self,
-        _validated_settings: Option<serde_json::Value>,
-    ) -> Result<(), Self::ErrorKind> {
         unimplemented!(
             "`NoMigration` used as a marker type. Its settings model should never be used."
         )

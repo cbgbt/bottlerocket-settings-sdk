@@ -4,7 +4,7 @@ use bottlerocket_modeled_types::{
     ECSAgentImagePullBehavior, ECSAgentLogLevel, ECSAttributeKey, ECSAttributeValue,
     ECSDurationValue, SingleLineString,
 };
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use std::{collections::HashMap, convert::Infallible};
 
 #[model(impl_default = true)]
@@ -44,54 +44,12 @@ impl SettingsModel for ECSSettingsV1 {
         // Set anything that can be parsed as ECSSettingsV1.
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // ECSSettingsV1 is validated during deserialization.
-        Ok(())
-    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
     use serde_json::json;
-
-    #[test]
-    fn test_generate_ecs_settings() {
-        assert_eq!(
-            ECSSettingsV1::generate(None, None),
-            Ok(GenerateResult::Complete(ECSSettingsV1 {
-                cluster: None,
-                instance_attributes: None,
-                allow_privileged_containers: None,
-                logging_drivers: None,
-                loglevel: None,
-                enable_spot_instance_draining: None,
-                image_pull_behavior: None,
-                container_stop_timeout: None,
-                task_cleanup_wait: None,
-                metadata_service_rps: None,
-                metadata_service_burst: None,
-                reserved_memory: None,
-                image_cleanup_wait: None,
-                image_cleanup_delete_per_cycle: None,
-                image_cleanup_enabled: None,
-                image_cleanup_age: None,
-                backend_host: None,
-                awsvpc_block_imds: None,
-                enable_container_metadata: None,
-            }))
-        )
-    }
 
     #[test]
     fn test_serde_ecs() {

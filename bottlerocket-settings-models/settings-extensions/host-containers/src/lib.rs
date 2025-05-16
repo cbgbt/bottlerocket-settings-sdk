@@ -1,7 +1,7 @@
 //! host-containers settings allow users to configure multiple host containers
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::{Identifier, Url, ValidBase64};
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::collections::HashMap;
 use std::convert::Infallible;
@@ -54,37 +54,11 @@ impl SettingsModel for HostContainersSettingsV1 {
         // Set anything that can be parsed as HostContainersSettingsV1.
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // HostContainersSettingsV1 is validated during deserialization.
-        Ok(())
-    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-
-    #[test]
-    fn test_generate_host_containers() {
-        let generated = HostContainersSettingsV1::generate(None, None).unwrap();
-
-        assert_eq!(
-            generated,
-            GenerateResult::Complete(HostContainersSettingsV1 {
-                host_containers: HashMap::new(),
-            })
-        )
-    }
 
     #[test]
     fn test_serde_host_containers() {

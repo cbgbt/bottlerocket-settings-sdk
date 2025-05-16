@@ -403,21 +403,6 @@ mod test {
                 ) -> Result<(), Infallible> {
                     Ok(())
                 }
-
-                fn generate(
-                    _existing_partial: Option<Self::PartialKind>,
-                    // We do not depend on any settings
-                    _dependent_settings: Option<serde_json::Value>,
-                ) -> Result<crate::GenerateResult<Self::PartialKind, Self>, Infallible> {
-                    Ok(crate::GenerateResult::Complete(Self::new()))
-                }
-
-                fn validate(
-                    _value: Self,
-                    _validated_settings: Option<serde_json::Value>,
-                ) -> Result<(), Infallible> {
-                    Ok(())
-                }
             }
 
             // We have to implement `TypeErasedModel` to make `ModelStore` happy

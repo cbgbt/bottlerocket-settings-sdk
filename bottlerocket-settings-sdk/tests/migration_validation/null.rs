@@ -1,8 +1,6 @@
 use super::common::define_model;
 use anyhow::Result;
-use bottlerocket_settings_sdk::{
-    BottlerocketSetting, GenerateResult, NullMigratorExtensionBuilder, SettingsModel,
-};
+use bottlerocket_settings_sdk::{BottlerocketSetting, NullMigratorExtensionBuilder, SettingsModel};
 use serde::{Deserialize, Serialize};
 
 define_model!(NullModelA, "v1");

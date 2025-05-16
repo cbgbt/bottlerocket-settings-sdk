@@ -1,6 +1,6 @@
 //! The motd setting is used to set the "message of the day" that is shown to users when logging
 //! into the Bottlerocket control container.
-use bottlerocket_settings_sdk::{GenerateResult, LinearlyMigrateable, NoMigration, SettingsModel};
+use bottlerocket_settings_sdk::{LinearlyMigrateable, NoMigration, SettingsModel};
 use bottlerocket_string_impls_for::string_impls_for;
 use std::convert::Infallible;
 
@@ -22,20 +22,6 @@ impl SettingsModel for MotdV1 {
 
     fn set(_current_value: Option<Self>, _target: Self) -> Result<()> {
         // Allow anything that parses as MotdV1
-        Ok(())
-    }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // No need to do any additional validation, any MotdV1 is acceptable
         Ok(())
     }
 }
@@ -68,16 +54,6 @@ string_impls_for!(MotdV1, "MotdV1");
 #[cfg(test)]
 mod test {
     use super::*;
-
-    #[test]
-    fn test_generate_motd() {
-        assert_eq!(
-            MotdV1::generate(None, None),
-            Ok(GenerateResult::Complete(MotdV1 {
-                inner: "".to_string()
-            }))
-        )
-    }
 
     #[test]
     fn test_serde_motd() {

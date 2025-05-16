@@ -1,6 +1,6 @@
 //! Settings related to Container Runtime
 use bottlerocket_model_derive::model;
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use std::convert::Infallible;
 
 #[model(impl_default = true)]
@@ -25,39 +25,12 @@ impl SettingsModel for ContainerRuntimeSettingsV1 {
         // Set anything that can be parsed as ContainerRuntimeSettingsV1.
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // ContainerRuntimeSettingsV1 is validated during deserialization.
-        Ok(())
-    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
     use serde_json::json;
-
-    #[test]
-    fn test_generate_container_runtime_settings() {
-        assert_eq!(
-            ContainerRuntimeSettingsV1::generate(None, None),
-            Ok(GenerateResult::Complete(ContainerRuntimeSettingsV1 {
-                max_container_log_line_size: None,
-                max_concurrent_downloads: None,
-                enable_unprivileged_ports: None,
-                enable_unprivileged_icmp: None,
-            }))
-        )
-    }
 
     #[test]
     fn test_serde_container_runtime() {

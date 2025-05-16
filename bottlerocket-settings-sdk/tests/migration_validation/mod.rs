@@ -18,17 +18,6 @@ mod common {
                 fn set(_: Option<Self>, _: Self) -> Result<()> {
                     unimplemented!()
                 }
-
-                fn generate(
-                    _: Option<Self::PartialKind>,
-                    _: Option<serde_json::Value>,
-                ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-                    unimplemented!()
-                }
-
-                fn validate(_: Self, _: Option<serde_json::Value>) -> Result<()> {
-                    unimplemented!()
-                }
             }
         };
     }

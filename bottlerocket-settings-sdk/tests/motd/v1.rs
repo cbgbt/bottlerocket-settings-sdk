@@ -2,8 +2,7 @@ use std::convert::Infallible;
 
 use super::*;
 use bottlerocket_settings_sdk::{
-    provide_template_helpers, GenerateResult, HelperDef, LinearlyMigrateable, NoMigration,
-    SettingsModel,
+    provide_template_helpers, HelperDef, LinearlyMigrateable, NoMigration, SettingsModel,
 };
 use bottlerocket_template_helper::template_helper;
 use serde::{Deserialize, Serialize};
@@ -30,22 +29,6 @@ impl SettingsModel for MotdV1 {
         _target: Self,
     ) -> Result<()> {
         // Allow anything that parses as MotdV1
-        Ok(())
-    }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        // We do not depend on any settings
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        // We generate a default motd if there is none.
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or(MotdV1::default()),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // No need to do any additional validation, any MotdV1 is acceptable
         Ok(())
     }
 
@@ -102,28 +85,6 @@ fn test_motdv1_set_failure() {
         .for_each(
             |value| assert!(set_cli(motd_settings_extension(), "v1", value.clone()).is_err()),
         );
-}
-
-#[test]
-fn test_motdv1_generate() {
-    // When generate is called on motdv1,
-    // an empty settings object is returned.
-    assert_eq!(
-        generate_cli(motd_settings_extension(), "v1", None, None).unwrap(),
-        GenerateResult::<MotdV1, MotdV1>::Complete(MotdV1(None))
-    );
-}
-
-#[test]
-fn test_motdv1_validate() {
-    // When validate is called on motdv1,
-    // it is successful for any value that parses
-    assert!(validate_cli(motd_settings_extension(), "v1", json!("test"), None).is_ok(),);
-}
-
-#[test]
-fn test_motdv1_failure() {
-    assert!(validate_cli(motd_settings_extension(), "v1", json!([1, 2, 3]), None).is_err(),);
 }
 
 #[test]

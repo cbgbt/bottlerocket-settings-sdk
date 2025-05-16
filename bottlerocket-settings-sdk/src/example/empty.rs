@@ -1,6 +1,6 @@
 //! A basic setting extension for use in doc comments.
 use super::{EmptyError, Result};
-use crate::{GenerateResult, LinearlyMigrateable, NoMigration, SettingsModel};
+use crate::{LinearlyMigrateable, NoMigration, SettingsModel};
 use serde::{Deserialize, Serialize};
 
 /// A setting with no data for use in doc comments.
@@ -16,17 +16,6 @@ impl SettingsModel for EmptySetting {
     }
 
     fn set(_current_value: Option<Self>, _target: Self) -> Result<()> {
-        Ok(())
-    }
-
-    fn generate(
-        _: Option<Self::PartialKind>,
-        _: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(Self))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
         Ok(())
     }
 }

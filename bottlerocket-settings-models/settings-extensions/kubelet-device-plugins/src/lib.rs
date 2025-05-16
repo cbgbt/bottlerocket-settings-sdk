@@ -1,7 +1,7 @@
 //! Settings related to Kubelet Device Plugins
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::NvidiaDevicePluginSettings;
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use std::convert::Infallible;
 
 #[model(impl_default = true)]
@@ -23,20 +23,6 @@ impl SettingsModel for KubeletDevicePluginsV1 {
         // Set anything that can be parsed as ECSSettingsV1.
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // KubeletDevicePluginsV1 is validated during deserialization.
-        Ok(())
-    }
 }
 
 #[cfg(test)]
@@ -49,15 +35,6 @@ mod test {
     };
     use bounded_integer::BoundedI32;
     use std::collections::HashMap;
-
-    #[test]
-    fn test_generate_kubelet_device_plugins() {
-        let generated = KubeletDevicePluginsV1::generate(None, None).unwrap();
-        assert_eq!(
-            generated,
-            GenerateResult::Complete(KubeletDevicePluginsV1 { nvidia: None })
-        );
-    }
 
     #[test]
     fn test_serde_kubelet_device_plugins() {

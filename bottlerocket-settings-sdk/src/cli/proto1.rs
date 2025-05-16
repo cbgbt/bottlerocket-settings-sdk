@@ -18,12 +18,6 @@ pub enum Proto1Command {
     /// Modify values owned by this setting
     Set(SetCommand),
 
-    /// Generate default values for this setting
-    Generate(GenerateCommand),
-
-    /// Validate values created by external settings
-    Validate(ValidateCommand),
-
     /// Migrate this setting from one given version to another
     Migrate(MigrateCommand),
 

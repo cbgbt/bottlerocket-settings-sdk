@@ -4,7 +4,7 @@ mod de;
 use crate::de::deserialize_limit;
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::{OciDefaultsCapability, OciDefaultsResourceLimitType};
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::convert::Infallible;
@@ -40,20 +40,6 @@ impl SettingsModel for OciDefaultsV1 {
         // Set anything that can be parsed as OciDefaultsV1.
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // OciDefaultsV1 is validated during deserialization.
-        Ok(())
-    }
 }
 
 #[cfg(test)]
@@ -61,17 +47,6 @@ mod test {
     use super::*;
     use serde_json::json;
     use std::collections::HashMap;
-
-    #[test]
-    fn test_generate_oci_defaults() {
-        assert_eq!(
-            OciDefaultsV1::generate(None, None),
-            Ok(GenerateResult::Complete(OciDefaultsV1 {
-                capabilities: None,
-                resource_limits: None,
-            }))
-        )
-    }
 
     #[test]
     fn test_serde_oci_defaults() {

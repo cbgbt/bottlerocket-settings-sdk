@@ -1,7 +1,7 @@
 //! Settings related to bootstrap commands.
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::{ApiclientCommand, BootstrapMode, Identifier};
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::{collections::BTreeMap, convert::Infallible};
 
@@ -50,38 +50,12 @@ impl SettingsModel for BootstrapCommandsSettingsV1 {
         // Set anything that parses as BootstrapCommandsSettingsV1.
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // Validate anything that parses as BootstrapCommandsSettingsV1.
-        Ok(())
-    }
 }
 
 #[cfg(test)]
 mod test_bootstrap_command {
     use super::*;
     use serde_json::json;
-
-    #[test]
-    fn test_generate_bootstrap_command_settings() {
-        let generated = BootstrapCommandsSettingsV1::generate(None, None).unwrap();
-
-        assert_eq!(
-            generated,
-            GenerateResult::Complete(BootstrapCommandsSettingsV1 {
-                bootstrap_commands: BTreeMap::new(),
-            })
-        )
-    }
 
     #[test]
     fn test_serde_bootstrap_command() {

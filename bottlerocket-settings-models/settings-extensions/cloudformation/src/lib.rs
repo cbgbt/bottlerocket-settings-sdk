@@ -1,7 +1,7 @@
 //! Settings related to CloudFormation signaling
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::SingleLineString;
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use std::convert::Infallible;
 
 #[model(impl_default = true)]
@@ -25,38 +25,12 @@ impl SettingsModel for CloudFormationSettingsV1 {
         // Set anything that can be parsed as CloudFormationSettingsV1.
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // CloudFormationSettingsV1 is validated during deserialization.
-        Ok(())
-    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
     use serde_json::json;
-
-    #[test]
-    fn test_generate_cloudformation_settings() {
-        assert_eq!(
-            CloudFormationSettingsV1::generate(None, None),
-            Ok(GenerateResult::Complete(CloudFormationSettingsV1 {
-                should_signal: None,
-                stack_name: None,
-                logical_resource_id: None,
-            }))
-        )
-    }
 
     #[test]
     fn test_serde_cloudformation() {

@@ -3,8 +3,7 @@ use std::collections::HashMap;
 use super::*;
 use anyhow::Result;
 use bottlerocket_settings_sdk::{
-    provide_template_helpers, GenerateResult, HelperDef, LinearlyMigrateable, NoMigration,
-    SettingsModel,
+    provide_template_helpers, HelperDef, LinearlyMigrateable, NoMigration, SettingsModel,
 };
 use bottlerocket_template_helper::template_helper;
 use serde::{Deserialize, Serialize};
@@ -28,28 +27,6 @@ impl SettingsModel for MotdV2 {
         _target: Self,
     ) -> anyhow::Result<()> {
         // Allow anything that parses as MotdV2
-        Ok(())
-    }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        // We do not depend on any settings
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<bottlerocket_settings_sdk::GenerateResult<Self::PartialKind, Self>> {
-        // We generate a default motd if there is none.
-        Ok(bottlerocket_settings_sdk::GenerateResult::Complete(
-            existing_partial.unwrap_or(MotdV2(vec![])),
-        ))
-    }
-
-    fn validate(value: Self, _validated_settings: Option<serde_json::Value>) -> anyhow::Result<()> {
-        let Self(inner_strings) = value;
-
-        // No whitespace allowed in any of the substrings
-        anyhow::ensure!(!inner_strings
-            .iter()
-            .any(|i| i.contains(char::is_whitespace)),);
-
         Ok(())
     }
 
@@ -117,14 +94,6 @@ fn test_motdv2_set_failure() {
     ]
     .into_iter()
     .for_each(|value| assert!(set_cli(motd_settings_extension(), "v2", value).is_err()));
-}
-
-#[test]
-fn test_motdv2_generate() {
-    assert_eq!(
-        generate_cli(motd_settings_extension(), "v2", None, None).unwrap(),
-        GenerateResult::<MotdV2, MotdV2>::Complete(MotdV2(vec![]))
-    );
 }
 
 #[test]

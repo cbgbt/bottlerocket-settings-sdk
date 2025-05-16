@@ -1,6 +1,6 @@
 //! Settings related to host-provided OCI Hooks
 use bottlerocket_model_derive::model;
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use std::convert::Infallible;
 
 /// The log4j hotpatch functionality is no longer included in Bottlerocket as of v1.15.0.
@@ -24,35 +24,11 @@ impl SettingsModel for OciHooksSettingsV1 {
         // Set anything that can be parsed as OciHooksSettingsV1.
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // OciHooksSettingsV1 is validated during deserialization.
-        Ok(())
-    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-
-    #[test]
-    fn test_generate_oci_hooks() {
-        assert_eq!(
-            OciHooksSettingsV1::generate(None, None).unwrap(),
-            GenerateResult::Complete(OciHooksSettingsV1 {
-                log4j_hotpatch_enabled: None,
-            })
-        )
-    }
 
     #[test]
     fn test_serde_oci_hooks() {

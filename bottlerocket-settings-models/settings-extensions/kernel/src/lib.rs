@@ -2,7 +2,7 @@
 //! kernel modules
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::{KmodKey, Lockdown, SysctlKey};
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use std::collections::HashMap;
 use std::convert::Infallible;
 
@@ -34,38 +34,11 @@ impl SettingsModel for KernelSettingsV1 {
         // allow anything that parses as KernelSettingsV1
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        Ok(())
-    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-
-    #[test]
-    fn test_generate_kernel() {
-        let generated = KernelSettingsV1::generate(None, None).unwrap();
-
-        assert_eq!(
-            generated,
-            GenerateResult::Complete(KernelSettingsV1 {
-                lockdown: None,
-                modules: None,
-                sysctl: None,
-            })
-        )
-    }
 
     #[test]
     fn test_serde_kernel() {

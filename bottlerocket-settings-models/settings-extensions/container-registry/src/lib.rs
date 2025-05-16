@@ -6,7 +6,7 @@ mod de;
 use crate::de::deserialize_mirrors;
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::{SingleLineString, Url, ValidBase64};
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use std::convert::Infallible;
 
 #[model(impl_default = true)]
@@ -37,8 +37,6 @@ struct RegistrySettingsV1 {
     credentials: Vec<RegistryCredentialV1>,
 }
 
-type Result<T> = std::result::Result<T, Infallible>;
-
 impl SettingsModel for RegistrySettingsV1 {
     type PartialKind = Self;
     type ErrorKind = Infallible;
@@ -54,38 +52,11 @@ impl SettingsModel for RegistrySettingsV1 {
         // Anything that correctly deserializes to RegistrySettingsV1 is ok
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(
-        _value: Self,
-        _validated_settings: Option<serde_json::Value>,
-    ) -> std::result::Result<(), Self::ErrorKind> {
-        Ok(())
-    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-
-    #[test]
-    fn test_generate_container_registry_settings() {
-        assert_eq!(
-            RegistrySettingsV1::generate(None, None),
-            Ok(GenerateResult::Complete(RegistrySettingsV1 {
-                mirrors: None,
-                credentials: None,
-            }))
-        )
-    }
 
     #[test]
     fn test_serde_container_registry_with_mirrors() {

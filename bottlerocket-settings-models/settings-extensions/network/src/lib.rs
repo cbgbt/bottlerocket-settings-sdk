@@ -1,7 +1,7 @@
 //! Settings related to networking configuration.
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::{EtcHostsEntries, SingleLineString, Url, ValidLinuxHostname};
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use std::convert::Infallible;
 
 #[model(impl_default = true)]
@@ -26,38 +26,11 @@ impl SettingsModel for NetworkSettingsV1 {
         // Set anything that can be parsed as NetworkSettingsV1.
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // NetworkSettingsV1 is validated during deserialization.
-        Ok(())
-    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-
-    #[test]
-    fn test_generate_network_settings() {
-        assert_eq!(
-            NetworkSettingsV1::generate(None, None),
-            Ok(GenerateResult::Complete(NetworkSettingsV1 {
-                hostname: None,
-                hosts: None,
-                https_proxy: None,
-                no_proxy: None,
-            }))
-        )
-    }
 
     #[test]
     fn test_serde_network() {

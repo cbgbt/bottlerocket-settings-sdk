@@ -2,7 +2,7 @@
 //! clock.
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::Url;
-use bottlerocket_settings_sdk::{GenerateResult, LinearlyMigrateable, NoMigration, SettingsModel};
+use bottlerocket_settings_sdk::{LinearlyMigrateable, NoMigration, SettingsModel};
 use std::convert::Infallible;
 
 #[model(impl_default = true)]
@@ -27,20 +27,6 @@ impl SettingsModel for NtpSettingsV1 {
         // Anything that parses as a list of URLs is ok
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // Anything that parses as a list of URLs is ok
-        Ok(())
-    }
 }
 
 impl LinearlyMigrateable for NtpSettingsV1 {
@@ -59,17 +45,6 @@ impl LinearlyMigrateable for NtpSettingsV1 {
 #[cfg(test)]
 mod test {
     use super::*;
-
-    #[test]
-    fn test_generate_ntp_settings() {
-        assert_eq!(
-            NtpSettingsV1::generate(None, None),
-            Ok(GenerateResult::Complete(NtpSettingsV1 {
-                time_servers: None,
-                options: None,
-            }))
-        )
-    }
 
     #[test]
     fn test_serde_ntp() {

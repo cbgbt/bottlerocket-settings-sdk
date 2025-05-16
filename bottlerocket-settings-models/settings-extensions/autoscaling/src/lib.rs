@@ -1,6 +1,6 @@
 //! Settings related to auto scaling groups.
 use bottlerocket_model_derive::model;
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use std::convert::Infallible;
 
 #[model(impl_default = true)]
@@ -22,33 +22,11 @@ impl SettingsModel for AutoScalingSettingsV1 {
         // Set anything that can be parsed as AutoScalingSettingsV1.
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        // AutoScalingSettingsV1 is validated during deserialization.
-        Ok(())
-    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-
-    #[test]
-    fn test_generate_autoscaling() {
-        assert_eq!(
-            AutoScalingSettingsV1::generate(None, None).unwrap(),
-            GenerateResult::Complete(AutoScalingSettingsV1 { should_wait: None })
-        )
-    }
 
     #[test]
     fn test_serde_autoscaling() {

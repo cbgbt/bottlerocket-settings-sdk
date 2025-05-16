@@ -36,7 +36,7 @@ pub use migrate::{
     Migrator, NoMigration, NullMigrator, NullMigratorExtensionBuilder,
 };
 
-pub use model::{BottlerocketSetting, GenerateResult, SettingsModel};
+pub use model::{BottlerocketSetting, SettingsModel};
 
 #[doc(hidden)]
 #[cfg(feature = "extension")]

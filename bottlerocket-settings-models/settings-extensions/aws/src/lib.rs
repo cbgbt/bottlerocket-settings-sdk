@@ -1,7 +1,7 @@
 //! The aws settings can be used to configure settings related to AWS
 use bottlerocket_model_derive::model;
 use bottlerocket_modeled_types::{SingleLineString, ValidBase64};
-use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+use bottlerocket_settings_sdk::SettingsModel;
 use std::convert::Infallible;
 
 // Platform-specific settings
@@ -27,38 +27,11 @@ impl SettingsModel for AwsSettingsV1 {
         // allow anything that parses as AwsSettingsV1
         Ok(())
     }
-
-    fn generate(
-        existing_partial: Option<Self::PartialKind>,
-        _dependent_settings: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        Ok(GenerateResult::Complete(
-            existing_partial.unwrap_or_default(),
-        ))
-    }
-
-    fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-        Ok(())
-    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-
-    #[test]
-    fn test_generate_aws() {
-        let generated = AwsSettingsV1::generate(None, None).unwrap();
-        assert_eq!(
-            generated,
-            GenerateResult::Complete(AwsSettingsV1 {
-                region: None,
-                config: None,
-                credentials: None,
-                profile: None,
-            })
-        )
-    }
 
     #[test]
     fn test_serde_aws() {

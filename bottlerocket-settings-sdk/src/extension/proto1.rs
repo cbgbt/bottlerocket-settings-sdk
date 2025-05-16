@@ -4,8 +4,7 @@
 //! with function name collisions if needed.
 use super::{error, SettingsExtensionError};
 use crate::cli::proto1::{
-    FloodMigrateCommand, GenerateCommand, MigrateCommand, Proto1Command, SetCommand,
-    TemplateHelperCommand, ValidateCommand,
+    FloodMigrateCommand, MigrateCommand, Proto1Command, SetCommand, TemplateHelperCommand,
 };
 use crate::migrate::Migrator;
 use crate::model::erased::AsTypeErasedModel;
@@ -49,10 +48,8 @@ where
 
     match cmd {
         Proto1Command::Set(s) => extension.set(s).map(|_| String::new()),
-        Proto1Command::Generate(g) => extension.generate(g).and_then(json_stringify),
         Proto1Command::Migrate(m) => extension.migrate(m).and_then(json_stringify),
         Proto1Command::FloodMigrate(m) => extension.flood_migrate(m).and_then(json_stringify),
-        Proto1Command::Validate(v) => extension.validate(v).map(|_| String::new()),
         Proto1Command::Helper(h) => extension.template_helper(h).and_then(json_stringify),
     }
 }
@@ -64,10 +61,6 @@ pub trait Proto1: Debug {
     type MigratorErrorKind: std::error::Error + Send + Sync + 'static;
 
     fn set(&self, args: SetCommand) -> Result<(), SettingsExtensionError<Self::MigratorErrorKind>>;
-    fn generate(
-        &self,
-        args: GenerateCommand,
-    ) -> Result<serde_json::Value, SettingsExtensionError<Self::MigratorErrorKind>>;
     fn migrate(
         &self,
         args: MigrateCommand,
@@ -76,10 +69,6 @@ pub trait Proto1: Debug {
         &self,
         args: FloodMigrateCommand,
     ) -> Result<serde_json::Value, SettingsExtensionError<Self::MigratorErrorKind>>;
-    fn validate(
-        &self,
-        args: ValidateCommand,
-    ) -> Result<(), SettingsExtensionError<Self::MigratorErrorKind>>;
     fn template_helper(
         &self,
         args: TemplateHelperCommand,
@@ -102,23 +91,6 @@ where
             .as_model()
             .set(args.current_value, args.value)
             .context(error::SetSnafu)
-    }
-
-    #[instrument(err)]
-    fn generate(
-        &self,
-        args: GenerateCommand,
-    ) -> Result<serde_json::Value, SettingsExtensionError<Self::MigratorErrorKind>> {
-        self.model(&args.setting_version)
-            .context(error::NoSuchModelSnafu {
-                setting_version: args.setting_version,
-            })?
-            .as_model()
-            .generate(args.existing_partial, args.required_settings)
-            .context(error::GenerateSnafu)
-            .and_then(|generated_data| {
-                serde_json::to_value(generated_data).context(error::SerializeResultSnafu)
-            })
     }
 
     #[instrument(err)]
@@ -173,20 +145,6 @@ where
             .perform_flood_migrations(self, starting_value, &args.from_version)
             .context(error::MigrateSnafu)
             .and_then(|value| serde_json::to_value(value).context(error::SerializeResultSnafu))
-    }
-
-    #[instrument(err)]
-    fn validate(
-        &self,
-        args: ValidateCommand,
-    ) -> Result<(), SettingsExtensionError<Self::MigratorErrorKind>> {
-        self.model(&args.setting_version)
-            .context(error::NoSuchModelSnafu {
-                setting_version: args.setting_version,
-            })?
-            .as_model()
-            .validate(args.value, args.required_settings)
-            .context(error::ValidateSnafu)
     }
 
     fn template_helper(

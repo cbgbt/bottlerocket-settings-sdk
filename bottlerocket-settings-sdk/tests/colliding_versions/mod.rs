@@ -1,6 +1,6 @@
 use bottlerocket_settings_sdk::{
-    BottlerocketSetting, GenerateResult, LinearMigratorExtensionBuilder, LinearlyMigrateable,
-    NoMigration, SettingsModel,
+    BottlerocketSetting, LinearMigratorExtensionBuilder, LinearlyMigrateable, NoMigration,
+    SettingsModel,
 };
 use serde::{Deserialize, Serialize};
 use snafu::Snafu;
@@ -44,17 +44,6 @@ impl SettingsModel for ModelA {
     fn set(_: Option<Self>, _: Self) -> Result<()> {
         unimplemented!()
     }
-
-    fn generate(
-        _: Option<Self::PartialKind>,
-        _: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        unimplemented!()
-    }
-
-    fn validate(_: Self, _: Option<serde_json::Value>) -> Result<()> {
-        unimplemented!()
-    }
 }
 
 impl LinearlyMigrateable for ModelA {
@@ -80,17 +69,6 @@ impl SettingsModel for ModelB {
     }
 
     fn set(_: Option<Self>, _: Self) -> Result<()> {
-        unimplemented!()
-    }
-
-    fn generate(
-        _: Option<Self::PartialKind>,
-        _: Option<serde_json::Value>,
-    ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-        unimplemented!()
-    }
-
-    fn validate(_: Self, _: Option<serde_json::Value>) -> Result<()> {
         unimplemented!()
     }
 }

@@ -1,7 +1,7 @@
 use anyhow::Result;
 use bottlerocket_settings_sdk::{
-    extension::SettingsExtensionError, BottlerocketSetting, GenerateResult,
-    LinearMigratorExtensionBuilder, LinearlyMigrateable, NoMigration, SettingsModel,
+    extension::SettingsExtensionError, BottlerocketSetting, LinearMigratorExtensionBuilder,
+    LinearlyMigrateable, NoMigration, SettingsModel,
 };
 use serde::{Deserialize, Serialize};
 
