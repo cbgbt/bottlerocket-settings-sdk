@@ -13,7 +13,6 @@ type Result<T> = std::result::Result<T, Infallible>;
 
 impl SettingsModel for MotdV1 {
     /// We only have one value, so there's no such thing as a partial
-    type PartialKind = Self;
     type ErrorKind = Infallible;
 
     fn get_version() -> &'static str {

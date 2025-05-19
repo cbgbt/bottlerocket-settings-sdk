@@ -8,7 +8,6 @@ mod common {
             pub struct $name;
 
             impl SettingsModel for $name {
-                type PartialKind = Self;
                 type ErrorKind = anyhow::Error;
 
                 fn get_version() -> &'static str {

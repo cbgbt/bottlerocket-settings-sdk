@@ -14,7 +14,6 @@ pub struct MotdV2(#[serde(default)] pub Vec<String>);
 
 impl SettingsModel for MotdV2 {
     /// We only have one value, so there's no such thing as a partial
-    type PartialKind = Self;
     type ErrorKind = anyhow::Error;
 
     fn get_version() -> &'static str {

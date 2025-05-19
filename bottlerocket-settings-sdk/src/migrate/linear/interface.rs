@@ -40,7 +40,6 @@ pub struct LinearMigrator;
 /// # type Result<T> = std::result::Result<T, EmptyError>;
 /// #
 /// # impl SettingsModel for ScoreV1 {
-/// #     type PartialKind = Self;
 /// #     type ErrorKind = EmptyError;
 /// #
 /// #     fn get_version() -> &'static str {
@@ -53,7 +52,6 @@ pub struct LinearMigrator;
 /// # }
 /// #
 /// # impl SettingsModel for ScoreV2 {
-/// #     type PartialKind = Self;
 /// #     type ErrorKind = EmptyError;
 /// #
 /// #     fn get_version() -> &'static str {

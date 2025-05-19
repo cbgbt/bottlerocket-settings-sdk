@@ -34,7 +34,6 @@ pub struct ModelA;
 pub struct ModelB;
 
 impl SettingsModel for ModelA {
-    type PartialKind = Self;
     type ErrorKind = MyError;
 
     fn get_version() -> &'static str {
@@ -61,7 +60,6 @@ impl LinearlyMigrateable for ModelA {
 }
 
 impl SettingsModel for ModelB {
-    type PartialKind = Self;
     type ErrorKind = MyError;
 
     fn get_version() -> &'static str {

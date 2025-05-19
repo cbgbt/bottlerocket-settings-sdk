@@ -33,7 +33,6 @@ pub use error::BottlerocketSettingError;
 /// // Implementing `bottlerocket_settings_sdk::SettingsModel` allows the settings SDK to expose
 /// // these settings in the Bottlerocket API.
 /// impl SettingsModel for MySettings {
-///     type PartialKind = Self;
 ///     type ErrorKind = anyhow::Error;
 ///
 ///     fn get_version() -> &'static str {
@@ -51,12 +50,6 @@ pub use error::BottlerocketSettingError;
 /// Once you have implemented the interface for the model, you must also select
 /// [which migrator](crate::migrate) to use, and implement any traits required for that migrator.
 pub trait SettingsModel: Sized + Serialize + DeserializeOwned + Debug {
-    /// A type that represents a partially-constructed version of the implementor of this trait.
-    ///
-    /// This is used during settings generation to represent cases in which a user has given an
-    /// incomplete version of the data, where more should be generated.
-    type PartialKind: Serialize + DeserializeOwned;
-
     /// The error type returned by the settings extension.
     type ErrorKind: Into<Box<dyn std::error::Error + Send + Sync + 'static>>;
 

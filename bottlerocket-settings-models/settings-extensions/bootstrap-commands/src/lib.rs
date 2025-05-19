@@ -39,7 +39,6 @@ struct BootstrapCommand {
 }
 
 impl SettingsModel for BootstrapCommandsSettingsV1 {
-    type PartialKind = Self;
     type ErrorKind = Infallible;
 
     fn get_version() -> &'static str {

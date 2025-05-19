@@ -38,7 +38,6 @@ struct RegistrySettingsV1 {
 }
 
 impl SettingsModel for RegistrySettingsV1 {
-    type PartialKind = Self;
     type ErrorKind = Infallible;
 
     fn get_version() -> &'static str {

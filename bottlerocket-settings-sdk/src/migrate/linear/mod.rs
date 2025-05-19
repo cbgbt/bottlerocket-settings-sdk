@@ -389,7 +389,6 @@ mod test {
             }
 
             impl crate::SettingsModel for $name {
-                type PartialKind = Self;
                 type ErrorKind = Infallible;
 
                 fn get_version() -> &'static str {

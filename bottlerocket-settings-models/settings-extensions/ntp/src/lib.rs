@@ -14,9 +14,6 @@ pub struct NtpSettingsV1 {
 type Result<T> = std::result::Result<T, Infallible>;
 
 impl SettingsModel for NtpSettingsV1 {
-    /// the `model` macro makes every field of the `NtpSettingsV1` struct an `Option`, so we can use
-    /// the type as its own `PartialKind`.
-    type PartialKind = Self;
     type ErrorKind = Infallible;
 
     fn get_version() -> &'static str {

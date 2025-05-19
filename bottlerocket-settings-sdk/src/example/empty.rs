@@ -8,7 +8,6 @@ use serde::{Deserialize, Serialize};
 pub struct EmptySetting;
 
 impl SettingsModel for EmptySetting {
-    type PartialKind = Self;
     type ErrorKind = EmptyError;
 
     fn get_version() -> &'static str {

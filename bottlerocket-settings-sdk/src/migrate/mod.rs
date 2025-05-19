@@ -119,7 +119,6 @@ impl NoMigration {
 // In cases that are parameterized on `SettingsModel` types where `NoMigration` is valid, the
 // implementor must check for the presence of `NoMigration` with `TypeId::of`
 impl SettingsModel for NoMigration {
-    type PartialKind = NoMigration;
     type ErrorKind = Infallible;
 
     fn get_version() -> &'static str {

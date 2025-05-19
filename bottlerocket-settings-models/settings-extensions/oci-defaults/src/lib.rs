@@ -29,7 +29,6 @@ struct OciDefaultsResourceLimitV1 {
 type Result<T> = std::result::Result<T, Infallible>;
 
 impl SettingsModel for OciDefaultsV1 {
-    type PartialKind = Self;
     type ErrorKind = Infallible;
 
     fn get_version() -> &'static str {
