@@ -2,7 +2,7 @@
 //! settings extensions that adhere to the settings extension CLI protocol.
 use crate::cli;
 use crate::migrate::{Migrator, ModelStore};
-use crate::model::erased::AsTypeErasedModel;
+use crate::model::erased::TypeErasedModel;
 use argh::FromArgs;
 use snafu::{ensure, OptionExt, ResultExt};
 use std::collections::{HashMap, HashSet};
@@ -27,7 +27,7 @@ type Version = String;
 /// extension protocol.
 pub struct SettingsExtension<Mi, Mo>
 where
-    Mo: AsTypeErasedModel,
+    Mo: TypeErasedModel,
     Mi: Migrator<ModelKind = Mo>,
 {
     name: &'static str,
@@ -37,7 +37,7 @@ where
 
 impl<Mi, Mo> SettingsExtension<Mi, Mo>
 where
-    Mo: AsTypeErasedModel,
+    Mo: TypeErasedModel,
     Mi: Migrator<ModelKind = Mo>,
 {
     /// Creates a new [`SettingsExtension`].
@@ -72,7 +72,7 @@ where
         models
             .into_iter()
             .map(|model| {
-                let version = model.as_model().get_version();
+                let version = model.get_version();
 
                 ensure!(
                     !unique_models.contains(version),
@@ -157,7 +157,7 @@ where
 
 impl<Mi, Mo> ModelStore for SettingsExtension<Mi, Mo>
 where
-    Mo: AsTypeErasedModel,
+    Mo: TypeErasedModel,
     Mi: Migrator<ModelKind = Mo>,
 {
     type ModelKind = Mo;
@@ -177,7 +177,7 @@ where
 
 impl<Mi, Mo> std::fmt::Debug for SettingsExtension<Mi, Mo>
 where
-    Mo: AsTypeErasedModel,
+    Mo: TypeErasedModel,
     Mi: Migrator<ModelKind = Mo>,
 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

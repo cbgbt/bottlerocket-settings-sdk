@@ -43,7 +43,7 @@ pub(crate) fn validate_migrations(
 
     let all_known_models: HashSet<&str> = models
         .iter()
-        .map(|(_, model)| model.as_model().get_version())
+        .map(|(_, model)| model.get_version())
         .collect();
 
     debug!("Checking for disjoint migration chains.");
@@ -60,14 +60,14 @@ fn validate_in_direction<'a>(
     starting_model: &dyn TypeErasedLinearlyMigrateable,
     direction: MigrationDirection,
 ) -> Result<HashSet<&'a str>> {
-    let starting_version = starting_model.as_model().get_version();
+    let starting_version = starting_model.get_version();
     let mut visited: HashSet<_> = [starting_version].into();
 
     migration_iter(models, starting_version, direction)
         .skip(1)
         .try_fold(starting_model, |previous_model, curr_model| {
-            let version = curr_model.as_model().get_version();
-            let previous_version = previous_model.as_model().get_version();
+            let version = curr_model.get_version();
+            let previous_version = previous_model.get_version();
 
             let opposite = direction.opposite();
 

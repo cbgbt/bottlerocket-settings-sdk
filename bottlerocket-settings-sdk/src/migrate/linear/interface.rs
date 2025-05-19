@@ -34,7 +34,7 @@ pub struct LinearMigrator;
 ///     all_scores: HashMap<String, i64>,
 /// }
 ///
-/// # use bottlerocket_settings_sdk::{GenerateResult, SettingsModel};
+/// # use bottlerocket_settings_sdk::SettingsModel;
 /// # use bottlerocket_settings_sdk::example::EmptyError;
 /// #
 /// # type Result<T> = std::result::Result<T, EmptyError>;
@@ -50,17 +50,6 @@ pub struct LinearMigrator;
 /// #     fn set(_current_value: Option<Self>, target: Self) -> Result<()> {
 /// #         Ok(())
 /// #     }
-/// #
-/// #     fn generate(
-/// #         _: Option<Self::PartialKind>,
-/// #         _: Option<serde_json::Value>,
-/// #     ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-/// #         Ok(GenerateResult::Complete(Self::default()))
-/// #     }
-/// #
-/// #     fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-/// #         Ok(())
-/// #     }
 /// # }
 /// #
 /// # impl SettingsModel for ScoreV2 {
@@ -72,17 +61,6 @@ pub struct LinearMigrator;
 /// #     }
 /// #
 /// #     fn set(_current_value: Option<Self>, target: Self) -> Result<()> {
-/// #         Ok(())
-/// #     }
-/// #
-/// #     fn generate(
-/// #         _: Option<Self::PartialKind>,
-/// #         _: Option<serde_json::Value>,
-/// #     ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-/// #         Ok(GenerateResult::Complete(Self::default()))
-/// #     }
-/// #
-/// #     fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
 /// #         Ok(())
 /// #     }
 /// # }

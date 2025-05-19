@@ -1,7 +1,7 @@
 //! Provides a `NullMigrator` for settings that do not require migration, e.g. settings with a
 //! single version.
 use crate::migrate::{MigrationResult, ModelStore};
-use crate::model::{AsTypeErasedModel, TypeErasedModel};
+use crate::model::TypeErasedModel;
 use crate::Migrator;
 use std::any::Any;
 
@@ -55,15 +55,6 @@ impl Migrator for NullMigrator {
         _starting_version: &str,
     ) -> Result<Vec<MigrationResult>, Self::ErrorKind> {
         Err(NullMigratorError::NoMigration)
-    }
-}
-
-// Needed to satisfy the type constraints of `ModelKind` in `Migrator`. Unfortunately, `Box` has no
-// way of providing all traits implemented by the type it points to, so we need to reimplement this
-// trait ourselves.
-impl AsTypeErasedModel for Box<dyn TypeErasedModel> {
-    fn as_model(&self) -> &dyn TypeErasedModel {
-        self.as_ref()
     }
 }
 

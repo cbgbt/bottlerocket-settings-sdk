@@ -7,7 +7,7 @@ use crate::cli::proto1::{
     FloodMigrateCommand, MigrateCommand, Proto1Command, SetCommand, TemplateHelperCommand,
 };
 use crate::migrate::Migrator;
-use crate::model::erased::AsTypeErasedModel;
+use crate::model::erased::TypeErasedModel;
 use crate::SettingsExtension;
 use snafu::{OptionExt, ResultExt};
 use std::fmt::Debug;
@@ -77,7 +77,7 @@ pub trait Proto1: Debug {
 
 impl<Mi, Mo> Proto1 for SettingsExtension<Mi, Mo>
 where
-    Mo: AsTypeErasedModel,
+    Mo: TypeErasedModel,
     Mi: Migrator<ModelKind = Mo>,
 {
     type MigratorErrorKind = Mi::ErrorKind;
@@ -88,7 +88,6 @@ where
             .context(error::NoSuchModelSnafu {
                 setting_version: args.setting_version,
             })?
-            .as_model()
             .set(args.current_value, args.value)
             .context(error::SetSnafu)
     }
@@ -104,13 +103,11 @@ where
                 setting_version: args.from_version.clone(),
             })?;
 
-        let starting_value =
-            model
-                .as_model()
-                .parse_erased(args.value)
-                .context(error::ModelParseSnafu {
-                    setting_version: args.from_version.clone(),
-                })?;
+        let starting_value = model
+            .parse_erased(args.value)
+            .context(error::ModelParseSnafu {
+                setting_version: args.from_version.clone(),
+            })?;
 
         self.migrator
             .perform_migration(
@@ -133,13 +130,11 @@ where
                 setting_version: args.from_version.clone(),
             })?;
 
-        let starting_value =
-            model
-                .as_model()
-                .parse_erased(args.value)
-                .context(error::ModelParseSnafu {
-                    setting_version: args.from_version.clone(),
-                })?;
+        let starting_value = model
+            .parse_erased(args.value)
+            .context(error::ModelParseSnafu {
+                setting_version: args.from_version.clone(),
+            })?;
 
         self.migrator
             .perform_flood_migrations(self, starting_value, &args.from_version)
@@ -155,7 +150,6 @@ where
             .context(error::NoSuchModelSnafu {
                 setting_version: args.setting_version,
             })?
-            .as_model()
             .execute_template_helper(&args.helper_name, args.arg)
             .context(error::TemplateHelperSnafu)
     }

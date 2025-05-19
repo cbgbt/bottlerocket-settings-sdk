@@ -22,18 +22,12 @@
 //! We use the [`Any`] trait to perform type-erasure and downcasting to the associated model types.
 use super::interface::LinearlyMigrateable;
 use super::{error, LinearMigratorError, MigrationDirection};
-use crate::model::erased::{AsTypeErasedModel, TypeErasedModel};
+use crate::model::erased::TypeErasedModel;
 use crate::BottlerocketSetting;
 use snafu::{OptionExt, ResultExt};
 use std::any::Any;
 
-pub trait TypeErasedLinearlyMigrateable {
-    /// Returns the associated model.
-    ///
-    /// This is a bit of a hack to make it so that `TypeErasedLinearlyMigrateable` trait objects can
-    /// blanket implement [`AsModel`].
-    fn as_model(&self) -> &dyn TypeErasedModel;
-
+pub trait TypeErasedLinearlyMigrateable: TypeErasedModel {
     /// Returns the model version that this model migrates to in a given direction.
     fn migrates_to(&self, direction: MigrationDirection) -> Option<&'static str>;
 
@@ -50,10 +44,6 @@ pub trait TypeErasedLinearlyMigrateable {
 }
 
 impl<T: LinearlyMigrateable + 'static> TypeErasedLinearlyMigrateable for BottlerocketSetting<T> {
-    fn as_model(&self) -> &dyn TypeErasedModel {
-        self
-    }
-
     fn migrates_to(&self, direction: MigrationDirection) -> Option<&'static str> {
         match direction {
             MigrationDirection::Backward => T::migrates_backward_to(),
@@ -117,14 +107,5 @@ impl<T: LinearlyMigrateable + 'static> TypeErasedLinearlyMigrateable for Bottler
                     version: T::get_version(),
                 })?;
         serde_json::to_value(current).context(error::SerializeMigrationResultSnafu)
-    }
-}
-
-// We need to implement `AsModel` to satisfy the `SettingsExtension` and `Migrator` interfaces.
-// Even if `TypeErasedLinearlyMigrateable` had `AsModel` as a supertrait, supertraits do not extend
-// to trait objects.
-impl AsTypeErasedModel for Box<dyn TypeErasedLinearlyMigrateable> {
-    fn as_model(&self) -> &dyn TypeErasedModel {
-        TypeErasedLinearlyMigrateable::as_model(self.as_ref())
     }
 }

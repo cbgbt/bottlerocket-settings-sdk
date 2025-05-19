@@ -60,17 +60,32 @@ pub trait TypeErasedModel: Debug {
     ) -> Result<serde_json::Value, BottlerocketSettingError>;
 }
 
-/// A helper trait used to "upcast" supertraits over the [`TypeErasedModel`] trait.
-///
-/// This is required until Rust supports trait upcast coercion.
-/// `<https://github.com/rust-lang/rust/issues/65991>`
-pub trait AsTypeErasedModel {
-    fn as_model(&self) -> &dyn TypeErasedModel;
-}
+impl<T: TypeErasedModel + ?Sized> TypeErasedModel for Box<T> {
+    fn get_version(&self) -> &'static str {
+        (**self).get_version()
+    }
 
-impl<T: TypeErasedModel> AsTypeErasedModel for T {
-    fn as_model(&self) -> &dyn TypeErasedModel {
-        self
+    fn set(
+        &self,
+        current: Option<serde_json::Value>,
+        target: serde_json::Value,
+    ) -> Result<(), BottlerocketSettingError> {
+        (**self).set(current, target)
+    }
+
+    fn parse_erased(
+        &self,
+        value: serde_json::Value,
+    ) -> Result<Box<dyn Any>, BottlerocketSettingError> {
+        (**self).parse_erased(value)
+    }
+
+    fn execute_template_helper(
+        &self,
+        helper_name: &str,
+        args: Vec<serde_json::Value>,
+    ) -> Result<serde_json::Value, BottlerocketSettingError> {
+        (**self).execute_template_helper(helper_name, args)
     }
 }
 

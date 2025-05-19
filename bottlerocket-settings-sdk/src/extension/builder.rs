@@ -20,7 +20,7 @@
 //!     .build();
 //! ```
 use super::SettingsExtensionError;
-use crate::model::erased::AsTypeErasedModel;
+use crate::model::erased::TypeErasedModel;
 use crate::{Migrator, SettingsExtension};
 use tracing::instrument;
 
@@ -104,7 +104,7 @@ macro_rules! extension_builder {
 /// A builder which can construct a [`SettingsExtension`].
 pub struct SettingsExtensionBuilder<Mi, Mo>
 where
-    Mo: AsTypeErasedModel,
+    Mo: TypeErasedModel,
     Mi: Migrator<ModelKind = Mo>,
 {
     name: &'static str,
@@ -114,7 +114,7 @@ where
 
 impl<Mi, Mo> SettingsExtensionBuilder<Mi, Mo>
 where
-    Mo: AsTypeErasedModel,
+    Mo: TypeErasedModel,
     Mi: Migrator<ModelKind = Mo>,
 {
     /// Returns a new [`SettingsExtensionBuilder`] associated with a given [`Migrator`].

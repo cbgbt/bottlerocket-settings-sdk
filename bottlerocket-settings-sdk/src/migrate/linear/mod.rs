@@ -70,7 +70,7 @@ impl Migrator for LinearMigrator {
             .try_fold(
                 (starting_value, starting_model),
                 |(curr_value, curr_model), next_direction| {
-                    let current_version = curr_model.as_model().get_version();
+                    let current_version = curr_model.get_version();
                     let next_version = curr_model.migrates_to(next_direction).expect(
                         "Failed to find migration which was previously found during route \
                         selection.",
@@ -114,7 +114,7 @@ impl Migrator for LinearMigrator {
 
         let mut results = Vec::with_capacity(models.len());
         results.push(MigrationResult {
-            version: starting_model.as_model().get_version(),
+            version: starting_model.get_version(),
             value: starting_model.serialize(starting_value.as_ref())?,
         });
 
@@ -125,8 +125,8 @@ impl Migrator for LinearMigrator {
                 .try_fold(
                     (starting_value, starting_model),
                     |(curr_value, curr_model), next_model| {
-                        let current_version = curr_model.as_model().get_version();
-                        let next_version = next_model.as_model().get_version();
+                        let current_version = curr_model.get_version();
+                        let next_version = next_model.get_version();
                         debug!(
                             current_version,
                             next_version, "Performing flood submigration."
@@ -229,7 +229,7 @@ impl LinearMigrator {
 
             migration_iter(all_models, starting_version, direction)
                 .enumerate()
-                .find(|(_ndx, model)| model.as_model().get_version() == target_version)
+                .find(|(_ndx, model)| model.get_version() == target_version)
                 .map(|(ndx, _)| {
                     debug!(
                         starting_version,
@@ -467,7 +467,7 @@ mod test {
         let models = test_extension_builder().build().unwrap();
 
         let versions = migration_iter(&models, "v1", Forward)
-            .map(|model| model.as_model().get_version())
+            .map(|model| model.get_version())
             .collect::<Vec<_>>();
 
         assert_eq!(versions, vec!["v1", "v2", "v3", "v4", "v5"])

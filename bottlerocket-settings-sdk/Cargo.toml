@@ -6,6 +6,10 @@ edition = "2021"
 repository = "https://github.com/bottlerocket-os/bottlerocket-settings-sdk"
 readme = "../README.md"
 
+# Uses trait upcasting, stabilized in 1.86
+# https://blog.rust-lang.org/2025/04/03/Rust-1.86.0/#trait-upcasting
+rust-version = "1.86"
+
 [dependencies]
 argh.workspace = true
 bottlerocket-template-helper.workspace = true

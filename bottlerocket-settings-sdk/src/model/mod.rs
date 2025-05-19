@@ -8,7 +8,7 @@ use std::marker::PhantomData;
 
 #[doc(hidden)]
 pub mod erased;
-pub use erased::{AsTypeErasedModel, TypeErasedModel};
+pub use erased::TypeErasedModel;
 pub use error::BottlerocketSettingError;
 
 /// This trait is required to model new settings in the Bottlerocket API using the settings SDK.
@@ -19,7 +19,7 @@ pub use error::BottlerocketSettingError;
 ///
 /// ```
 /// # use anyhow::Result;
-/// # use bottlerocket_settings_sdk::{SettingsModel, GenerateResult};
+/// # use bottlerocket_settings_sdk::SettingsModel;
 /// # use serde::{Serialize, Deserialize};
 /// # use std::convert::Infallible;
 ///
@@ -42,19 +42,6 @@ pub use error::BottlerocketSettingError;
 ///
 ///     fn set(current_value: Option<Self>, target: Self) -> Result<()> {
 ///         // Perform any additional validations of the new value here...
-///         Ok(())
-///     }
-///
-///     fn generate(
-///         _: Option<Self::PartialKind>,
-///         _: Option<serde_json::Value>,
-///     ) -> Result<GenerateResult<Self::PartialKind, Self>> {
-///         // Dynamic generation of the value occurs here...
-///         Ok(GenerateResult::Complete(MySettings::default()))
-///     }
-///
-///     fn validate(_value: Self, _validated_settings: Option<serde_json::Value>) -> Result<()> {
-///         // Cross-validation of new values can occur against other settings here...
 ///         Ok(())
 ///     }
 /// }
