@@ -1,8 +1,6 @@
 use super::*;
 use bottlerocket_settings_sdk::migrate::LinearMigratorModel;
-use bottlerocket_settings_sdk::{
-    BottlerocketSetting, LinearMigrator, LinearMigratorExtensionBuilder, SettingsExtension,
-};
+use bottlerocket_settings_sdk::{settings_extension, LinearMigrator, SettingsExtension};
 use serde_json::json;
 
 // These modules implement two versions of the "motd" settings extension, as well as CLI tests
@@ -15,13 +13,14 @@ pub use v2::MotdV2;
 
 /// Helper to create the setting extension for these tests.
 fn motd_settings_extension() -> SettingsExtension<LinearMigrator, LinearMigratorModel> {
-    LinearMigratorExtensionBuilder::with_name("motd")
-        .with_models(vec![
-            BottlerocketSetting::<v1::MotdV1>::model(),
-            BottlerocketSetting::<v2::MotdV2>::model(),
-        ])
-        .build()
-        .expect("Failed to build motd settings extension")
+    settings_extension! {
+        name: "motd",
+        models: [
+            v1::MotdV1,
+            v2::MotdV2,
+        ],
+        migrator: LinearMigrator,
+    }
 }
 
 #[test]

@@ -4,6 +4,7 @@ use bottlerocket_string_impls_for::string_impls_for;
 use bounded_integer::BoundedI32;
 use lazy_static::lazy_static;
 use regex::Regex;
+use schemars::JsonSchema;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 // Just need serde's Error in scope to get its trait methods
 use bottlerocket_model_derive::model;
@@ -481,7 +482,7 @@ mod test_kubernetes_bootstrap_token {
 /// KubernetesEvictionKey represents a string that contains a valid Kubernetes eviction key.
 /// https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/
 
-#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, Scalar)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, Scalar, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 pub enum KubernetesEvictionKey {
     #[serde(rename = "memory.available")]
@@ -621,7 +622,7 @@ pub struct KubernetesReservedResourceKey {
     inner: String,
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Hash, Deserialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Deserialize, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 enum ReservedResources {
     Cpu,
@@ -674,7 +675,7 @@ mod test_reserved_resources_key {
 /// KubernetesQuantityValue represents a string that contains a valid kubernetes quantity value.
 /// https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 
-#[derive(Debug, Clone, Eq, PartialEq, Hash)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, JsonSchema)]
 pub struct KubernetesQuantityValue {
     inner: String,
 }
@@ -789,7 +790,7 @@ mod test_kubernetes_cloud_provider {
 pub struct CpuManagerPolicy {
     inner: String,
 }
-#[derive(Debug, Clone, Eq, PartialEq, Hash, Deserialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Deserialize, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 enum ValidCpuManagerPolicy {
     #[serde(alias = "Static")]
@@ -913,7 +914,7 @@ mod test_kubernetes_duration_value {
 pub struct TopologyManagerScope {
     inner: String,
 }
-#[derive(Debug, Clone, Eq, PartialEq, Hash, Deserialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Deserialize, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 enum ValidTopologyManagerScope {
     Container,
@@ -962,7 +963,7 @@ mod test_topology_manager_scope {
 pub struct TopologyManagerPolicy {
     inner: String,
 }
-#[derive(Debug, Clone, Eq, PartialEq, Hash, Deserialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Deserialize, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 enum ValidTopologyManagerPolicy {
     None,
@@ -1332,7 +1333,7 @@ pub struct CredentialProvider {
 // =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=
 
 /// KubernetesCPUManagerPolicyOption values are the possible option names for the cpuManagerPolicyOptions.
-#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, Scalar)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, Scalar, JsonSchema)]
 pub enum KubernetesCPUManagerPolicyOption {
     #[serde(rename = "full-pcpus-only")]
     FullPCPUsOnly,
@@ -1362,7 +1363,7 @@ mod test_kubernetes_cpu_manager_policy_option {
 
 /// KubernetesMemoryReservationKey represents a string that contains a valid Kubernetes memory
 /// resource reservation key.
-#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, Scalar)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, Scalar, JsonSchema)]
 pub enum KubernetesMemoryReservationKey {
     #[serde(rename = "memory")]
     Memory,
@@ -1393,7 +1394,7 @@ mod test_memory_reservation_key {
 }
 
 /// KubernetesMemoryReservation enables setting kubelet reserved memory values.
-#[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "kebab-case")]
 pub struct KubernetesMemoryReservation {
     enabled: bool,
@@ -1402,7 +1403,7 @@ pub struct KubernetesMemoryReservation {
 }
 
 /// KubernetesMemoryManagerPolicy represents the valid options for the memory manager policy.
-#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, Scalar)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, Scalar, JsonSchema)]
 pub enum KubernetesMemoryManagerPolicy {
     #[serde(alias = "static")]
     Static,
@@ -1432,7 +1433,7 @@ mod test_kubernetes_memory_manager_policy {
 
 /// KubernetesHostnameOverrideSource represents a string that is a valid hostname override source.
 /// This is used to configure different node name modes for Kubernetes nodes.
-#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, Scalar)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, Scalar, JsonSchema)]
 pub enum KubernetesHostnameOverrideSource {
     #[serde(rename = "private-dns-name")]
     PrivateDNSName,
@@ -1473,21 +1474,21 @@ pub struct NvidiaDevicePluginSettings {
     mig: NvidiaMigSettings,
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "kebab-case")]
 pub enum NvidiaDeviceIdStrategy {
     Uuid,
     Index,
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "kebab-case")]
 pub enum NvidiaDeviceListStrategy {
     Envvar,
     VolumeMounts,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "kebab-case")]
 pub enum NvidiaDeviceSharingStrategy {
     None,
@@ -1501,7 +1502,7 @@ pub struct NvidiaTimeSlicingSettings {
     fail_requests_greater_than_one: bool,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 pub enum NvidiaDevicePartitioningStrategy {
     #[default]
@@ -1544,7 +1545,7 @@ impl TryFrom<&str> for NvidiaGpuModel {
 
 string_impls_for!(NvidiaGpuModel, "NvidiaGpuModel");
 
-#[derive(Debug, Clone, Eq, PartialEq, Hash)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, JsonSchema)]
 pub struct MigProfile {
     inner: String,
 }

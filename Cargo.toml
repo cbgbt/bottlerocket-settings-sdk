@@ -93,8 +93,10 @@ base64 = "0.22"
 bounded-integer = "0.5"
 ctor = "0.2"
 darling = "0.20"
+enum_dispatch = "0.3"
 env_logger = "0.11"
 indexmap = "2"
+jsonschema = "0.28"
 lazy_static = "1.4"
 libc = "0.2"
 log = "0.4"
@@ -104,10 +106,13 @@ quote = "1"
 rand = "0.8"
 regex = "1"
 semver = "1"
+schemars = "1.0.0-alpha"
 serde = "1"
 serde_json = "1"
 serde_plain = "1"
 snafu = "0.8"
+strum = "0.27"
+strum_macros = "0.27"
 syn = { version = "2", default-features = false }
 toml = "0.8"
 tracing = "0.1"
@@ -117,3 +122,6 @@ x509-parser = "0.16"
 
 [workspace.lints.clippy]
 indexing_slicing = "deny"
+
+[patch.crates-io]
+schemars = { path = "../schemars/schemars" }

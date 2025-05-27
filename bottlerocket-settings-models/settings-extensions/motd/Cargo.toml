@@ -10,6 +10,7 @@ publish = false
 bottlerocket-settings-sdk.workspace = true
 bottlerocket-string-impls-for.workspace = true
 env_logger.workspace = true
+schemars.workspace = true
 serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true
 

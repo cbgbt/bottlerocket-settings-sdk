@@ -193,3 +193,24 @@ pub use ecs::*;
 pub use kubernetes::*;
 pub use oci_defaults::*;
 pub use shared::*;
+
+#[cfg(test)]
+pub(crate) mod schema_test {
+    use snafu::Snafu;
+
+    pub(crate) fn validate_against_schema<T: schemars::JsonSchema>(
+        value: &serde_json::Value,
+    ) -> Result<(), jsonschema::ValidationError> {
+        let schema = schemars::schema_for!(T);
+        let validator = jsonschema::options()
+            .should_validate_formats(true)
+            .build(schema.as_value())
+            .expect("valid schema");
+        validator.validate(value)
+    }
+
+    #[derive(Debug, Snafu)]
+    pub(crate) struct ValidateError<'a> {
+        source: jsonschema::ValidationError<'a>,
+    }
+}

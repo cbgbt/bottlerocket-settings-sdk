@@ -10,6 +10,7 @@ publish = false
 bottlerocket-modeled-types.workspace = true
 bottlerocket-model-derive.workspace = true
 bottlerocket-settings-sdk.workspace = true
+schemars.workspace = true
 env_logger.workspace = true
 serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true

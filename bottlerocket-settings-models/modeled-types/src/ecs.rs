@@ -7,6 +7,7 @@ use bottlerocket_scalar::traits::{Scalar, Validate};
 use bottlerocket_scalar::ValidationError;
 use bottlerocket_scalar_derive::Scalar;
 use bottlerocket_string_impls_for::string_impls_for;
+use schemars::{json_schema, JsonSchema};
 use snafu::ensure;
 use std::convert::TryFrom;
 
@@ -31,9 +32,22 @@ lazy_static! {
     .unwrap();
 }
 
+impl JsonSchema for ECSAttributeKey {
+    fn schema_name() -> std::borrow::Cow<'static, str> {
+        "ECSAttributeKey".into()
+    }
+
+    fn json_schema(_: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        json_schema!({
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9._/-]{1,128}$"
+        })
+    }
+}
+
 impl Validate for ECSAttributeKey {
     fn validate<S: Into<String>>(input: S) -> std::result::Result<Self, ValidationError> {
-        let input = input.into();
+        let input: String = input.into();
         require!(
             ECS_ATTRIBUTE_KEY.is_match(&input),
             big_pattern_error("ECS attribute key", &input)
@@ -44,6 +58,10 @@ impl Validate for ECSAttributeKey {
 
 #[cfg(test)]
 mod test_ecs_attribute_key {
+    use schemars::schema_for;
+
+    use crate::validate_against_schema;
+
     use super::ECSAttributeKey;
     use std::convert::TryFrom;
 
@@ -61,6 +79,7 @@ mod test_ecs_attribute_key {
             "trailingperiod.",
         ] {
             ECSAttributeKey::try_from(*key).unwrap();
+            assert!(validate_against_schema(serde_json::Value::from(*key)).is_ok());
         }
     }
 
@@ -76,6 +95,13 @@ mod test_ecs_attribute_key {
             "no spaces allowed",
         ] {
             ECSAttributeKey::try_from(*key).unwrap_err();
+
+            let schema = schema_for!(ECSAttributeKey);
+            let validator = jsonschema::options()
+                .should_validate_formats(true)
+                .build(schema.as_value())
+                .expect("valid schema");
+            assert!(validator.validate(&serde_json::Value::from(*key)).is_err());
         }
     }
 }
@@ -106,6 +132,19 @@ lazy_static! {
           $"
     )
     .unwrap();
+}
+
+impl JsonSchema for ECSAttributeValue {
+    fn schema_name() -> std::borrow::Cow<'static, str> {
+        "ECSAttributeValue".into()
+    }
+
+    fn json_schema(_: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        json_schema!({
+            "type": "string",
+            "pattern": r"^[a-zA-Z0-9.@:_/\\-](([a-zA-Z0-9.@:\ _/\\-]{0,126})?[a-zA-Z0-9.@:_/\\-])?$",
+        })
+    }
 }
 
 impl TryFrom<&str> for ECSAttributeValue {
@@ -172,7 +211,7 @@ mod test_ecs_attribute_value {
 // =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=
 
 /// ECSAgentLogLevel represents a string that contains a valid ECS log level for the ECS agent.
-#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, Scalar)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, Scalar, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 pub enum ECSAgentLogLevel {
     Debug,
@@ -208,7 +247,7 @@ mod test_ecs_agent_log_level {
 // =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=
 
 /// ECSAgentImagePullBehavior represents a valid ECS Image Pull Behavior for the ECS agent.
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, Scalar)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, Scalar, JsonSchema)]
 #[serde(rename_all = "kebab-case")]
 #[repr(u8)]
 pub enum ECSAgentImagePullBehavior {

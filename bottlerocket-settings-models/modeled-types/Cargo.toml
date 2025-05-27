@@ -13,13 +13,15 @@ bottlerocket-scalar.workspace = true
 bottlerocket-scalar-derive.workspace = true
 bottlerocket-string-impls-for.workspace = true
 bottlerocket-model-derive.workspace = true
-bounded-integer = { workspace = true, features = ["types", "serde1"]}
+bounded-integer = { workspace = true, features = ["types", "serde1", "macro"]}
 base64.workspace = true
 indexmap = { workspace = true, features = ["serde"] }
+jsonschema.workspace = true
 lazy_static.workspace = true
 regex.workspace = true
+schemars = { workspace = true, features = ["bounded_integer05", "url2"] }
 semver.workspace = true
-serde.workspace = true
+serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true
 serde_plain.workspace = true
 snafu.workspace = true

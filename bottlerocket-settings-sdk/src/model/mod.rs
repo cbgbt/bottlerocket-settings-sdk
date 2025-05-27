@@ -1,6 +1,7 @@
 //! Provides the [`SettingsModel`] trait interface required to model new settings in the
 //! Bottlerocket API using the settings SDK.
 use crate::HelperDef;
+use enum_dispatch::enum_dispatch;
 use serde::{de::DeserializeOwned, Serialize};
 use std::collections::HashMap;
 use std::fmt::Debug;
@@ -49,6 +50,7 @@ pub use error::BottlerocketSettingError;
 ///
 /// Once you have implemented the interface for the model, you must also select
 /// [which migrator](crate::migrate) to use, and implement any traits required for that migrator.
+#[enum_dispatch]
 pub trait SettingsModel: Sized + Serialize + DeserializeOwned + Debug {
     /// The error type returned by the settings extension.
     type ErrorKind: Into<Box<dyn std::error::Error + Send + Sync + 'static>>;

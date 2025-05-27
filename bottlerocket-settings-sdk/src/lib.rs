@@ -41,3 +41,21 @@ pub use model::{BottlerocketSetting, SettingsModel};
 #[doc(hidden)]
 #[cfg(feature = "extension")]
 pub mod example;
+
+#[macro_export]
+/// TODO
+macro_rules! settings_extension {
+  {
+    name: $name:expr,
+    models: [$($model_ty:ty),* $(,)?],
+    migrator: $migrator:expr $(,)?
+  } => {
+    $crate::SettingsExtension::new(
+      $name,
+      vec![
+        $($crate::BottlerocketSetting::<$model_ty>::model() as _,)*
+      ],
+      $migrator
+    ).expect(&format!("Failed to build '{}' settings extension", $name))
+  }
+}

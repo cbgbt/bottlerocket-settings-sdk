@@ -6,6 +6,7 @@ use bottlerocket_scalar_derive::Scalar;
 use bottlerocket_string_impls_for::string_impls_for;
 use lazy_static::lazy_static;
 use regex::Regex;
+use schemars::{json_schema, JsonSchema};
 use semver::Version;
 use serde::{Deserialize, Serialize};
 use snafu::{ensure, ResultExt};
@@ -22,6 +23,19 @@ use url::Host;
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub struct ValidBase64 {
     inner: String,
+}
+
+impl JsonSchema for ValidBase64 {
+    fn schema_name() -> std::borrow::Cow<'static, str> {
+        "ValidBase64".into()
+    }
+
+    fn json_schema(_: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        json_schema!({
+            "type": "string",
+            "contentEncoding": "base64"
+        })
+    }
 }
 
 /// Validate base64 format before we accept the input.
@@ -68,7 +82,7 @@ mod test_valid_base64 {
 /// line.  It stores the original form and makes it accessible through standard traits.  Its
 /// purpose is input validation, for example in cases where you want to accept input for a
 /// configuration file and want to ensure a user can't create a new line with extra configuration.
-#[derive(Debug, Clone, Eq, PartialEq, Hash)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, JsonSchema)]
 pub struct SingleLineString {
     inner: String,
 }
@@ -138,7 +152,7 @@ mod test_single_line_string {
 /// ValidLinuxHostname represents a string that contains a valid Linux hostname as defined by
 /// https://man7.org/linux/man-pages/man7/hostname.7.html.  It stores the original form and makes
 /// it accessible through standard traits.
-#[derive(Debug, Clone, Eq, PartialEq, Hash)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, JsonSchema)]
 pub struct ValidLinuxHostname {
     inner: String,
 }
@@ -238,7 +252,7 @@ mod test_valid_linux_hostname {
 
 /// EtcHostsEntries represents a mapping of IP Address to hostname aliases that can apply to those
 /// addresses.
-#[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(transparent)]
 pub struct EtcHostsEntries(
     // Ordering matters in /etc/hosts, and this setting directly maps to that file and its behavior in glibc.
@@ -447,6 +461,16 @@ mod test_valid_identifier {
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub struct Url {
     inner: String,
+}
+
+impl JsonSchema for Url {
+    fn schema_name() -> std::borrow::Cow<'static, str> {
+        <url::Url as JsonSchema>::schema_name()
+    }
+
+    fn json_schema(generator: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        <url::Url as JsonSchema>::json_schema(generator)
+    }
 }
 
 impl TryFrom<&str> for Url {
@@ -947,7 +971,7 @@ string_impls_for!(Lockdown, "Lockdown");
 
 /// ApiclientCommand represents a valid Bootstrap Command. It stores the command as a vector of
 /// strings and ensures that the first argument is apiclient.
-#[derive(Debug, Clone, Eq, PartialEq, Hash, Default, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Default, Serialize, JsonSchema)]
 pub struct ApiclientCommand(Vec<String>);
 
 impl ApiclientCommand {
@@ -1020,34 +1044,33 @@ mod test_valid_apiclient_command {
 }
 
 // =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=   =^..^=
-#[derive(Debug, Clone, Eq, PartialEq, Hash)]
-pub struct BootstrapMode {
-    inner: String,
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "lowercase")]
+pub enum BootstrapMode {
+    Off,
+    Once,
+    Always,
 }
+
+serde_plain::derive_fromstr_from_deserialize!(BootstrapMode);
 
 impl TryFrom<&str> for BootstrapMode {
     type Error = error::Error;
 
     fn try_from(input: &str) -> Result<Self, error::Error> {
-        ensure!(
-            matches!(input, "off" | "once" | "always"),
-            error::InvalidBootstrapModeSnafu { input }
-        );
-        Ok(BootstrapMode {
-            inner: input.to_string(),
-        })
+        input
+            .parse()
+            .map_err(|_| error::Error::InvalidBootstrapMode {
+                input: input.to_string(),
+            })
     }
 }
 
 impl Default for BootstrapMode {
     fn default() -> Self {
-        BootstrapMode {
-            inner: "off".to_string(),
-        }
+        BootstrapMode::Off
     }
 }
-
-string_impls_for!(BootstrapMode, "BootstrapMode");
 
 #[cfg(test)]
 mod test_valid_container_mode {
